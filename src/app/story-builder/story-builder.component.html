@@ -1,3 +1,30 @@
-<p>
-  story-builder works!
-</p>
+<div id="OuterDiv">
+  <div class="leftpane"><img class="leftimage" src="assets/img/angular-logo.png">
+    <!--<a routerLink="/story-builder" class="button">Previous Scene</a>-->
+  </div>
+  <div class="middlepane">
+    <p>
+      This is placeholder text for the lines that will be generated from the Markov chain. This is the first dialogue for this scene. User enters his
+      text after this text.
+    </p>
+    <br>
+    <textarea class="textArea" id="textArea1" rows="4" cols="55" placeholder="Enter first dialogue"></textarea>
+    <br>
+    <p>
+      This is placeholder text for the lines that will be generated from the Markov chain. This is the second dialogue for this scene. User enters his
+      text after this text.
+    </p>
+    <br>
+    <textarea class="textArea" id="textArea2" rows="4" cols="55" placeholder="Enter second dialogue"></textarea>
+
+    <br><br><br><br><br><br> <br>
+    <div align="center">
+      <a align="left" routerLink="/story-builder" class="button">Previous</a>
+      <a routerLink="/final-story" class="button">Complete Story</a>
+      <a routerLink="/story-builder" class="button">Add Scene</a>
+    </div>
+  </div>
+  <div class="rightpane"><img class="leftimage" src="assets/img/angular-logo.png">
+    <!--<a routerLink="/story-builder" class="button">Add scene</a>-->
+  </div>
+</div>
