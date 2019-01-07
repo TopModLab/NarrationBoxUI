@@ -18,7 +18,8 @@ import { HomeComponent } from './home/home.component';
     FinalStoryComponent,
     AboutUsComponent,
     NavComponent,
-    HomeComponent
+    HomeComponent,
+
   ],
   imports: [
     BrowserModule,
