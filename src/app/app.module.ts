@@ -1,31 +1,50 @@
+﻿import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { ReactiveFormsModule }    from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { IntroductionComponent } from './introduction/introduction.component';
-import { StoryBuilderComponent } from './story-builder/story-builder.component';
-import { FinalStoryComponent } from './final-story/final-story.component';
-import { AboutUsComponent } from './about-us/about-us.component';
-import { NavComponent } from './nav/nav.component';
-import { HomeComponent } from './home/home.component';
+// used to create fake backend
+import { fakeBackendProvider } from './_helpers';
 
+import { AppComponent }  from './app.component';
+import { routing }        from './app.routing';
+
+import { AlertComponent } from './_components';
+import { JwtInterceptor, ErrorInterceptor } from './_helpers';
+import { HomeComponent } from './home';
+import { LoginComponent } from './login';
+import { RegisterComponent } from './register';;
+import { IntroductionComponent } from './introduction/introduction.component';
+import { StoryBuilderComponent } from './story-builder/story-builder.component'
+;
+import { FinalStoryComponent } from './final-story/final-story.component';
+import { UploadXmlComponent } from './upload-xml/upload-xml.component'
 @NgModule({
-  declarations: [
-    AppComponent,
-    IntroductionComponent,
-    StoryBuilderComponent,
-    FinalStoryComponent,
-    AboutUsComponent,
-    NavComponent,
-    HomeComponent,
+    imports: [
+        BrowserModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        routing
+    ],
+    declarations: [
+        AppComponent,
+        AlertComponent,
+        HomeComponent,
+        LoginComponent,
+        RegisterComponent,
+        IntroductionComponent
+,
+        StoryBuilderComponent ,
+        FinalStoryComponent ,
+        UploadXmlComponent  ],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+        // provider used to create fake backend
+        fakeBackendProvider
+    ],
+    bootstrap: [AppComponent]
 })
+
 export class AppModule { }

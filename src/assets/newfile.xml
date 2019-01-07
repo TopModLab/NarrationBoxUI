@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<story title="StoryTitle" char1="someCharacter1" char2="someCharacter2">
+	<introduction> Some random text for story introduction
+	</introduction>
+	<scene id="1">
+        	<image1> Character 1 image for scene 1</image1>
+                <image2> Character 2 image scene 1</image2>
+                <dialogue1> Dialogue 1 from markov </dialogue1>
+                <dialogue2> Dialogue 1 user entered  </dialogue2>                
+                <dialogue3> Dialogue 2 from markov </dialogue3>   
+                <dialogue4> Dialogue 2 user entered </dialogue4>     
+	</scene>
+
+	<scene id="2">
+        	<image1> Character 1 image for scene 2</image1>
+                <image2> Character 2 image scene 2</image2>
+                <dialogue1> Dialogue 1 from markov </dialogue1>
+                <dialogue2> Dialogue 1 user entered  </dialogue2>                
+                <dialogue3> Dialogue 2 from markov </dialogue3>   
+                <dialogue4> Dialogue 2 user entered </dialogue4>     
+	</scene>
+
+	<scene id="3">
+        	<image1> Character 1 image for scene 3</image1>
+                <image2> Character 2 image scene 3</image2>
+                <dialogue1> Dialogue 1 from markov </dialogue1>
+                <dialogue2> Dialogue 1 user entered  </dialogue2>                
+                <dialogue3> Dialogue 2 from markov </dialogue3>   
+                <dialogue4> Dialogue 2 user entered </dialogue4>     
+	</scene>
+
+</story>
+
+</xml>

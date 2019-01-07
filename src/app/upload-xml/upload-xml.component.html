@@ -1,0 +1,24 @@
+<script>
+function readXML(){
+console.log("clicked");
+let xml = new XMLHttpRequest();
+xml.open('GET',"assets/newfile.xml", false);
+xml.send();
+let xmlData = this.xml.responseXML.toString();
+document.write(xmlData);
+// if(!xmlData){
+//   xmlData = (new DOMParser()).parseFromString(this.xml.responseText,'text/xml');
+//
+// }
+  }
+</script>
+
+<!--<form action="myform.cgi">-->
+  <input type="file">
+  <label> Select a file to upload</label>
+  <button class="button" onclick="readXML()"> Submit</button>
+<!--</form>-->
+<!--<br><br>-->
+<!--<div>-->
+<!--<textarea class="textArea" id="textArea1" rows="10" cols="80" placeholder="Uploaded file"></textarea>-->
+<!--</div>-->
