@@ -8,6 +8,7 @@ import {IntroductionComponent} from "@app/introduction/introduction.component";
 import {StoryBuilderComponent} from "@app/story-builder/story-builder.component";
 import {FinalStoryComponent} from "@app/final-story/final-story.component";
 import {UploadXmlComponent} from '@app/upload-xml/upload-xml.component';
+// import {DialogComponent} from "@app/upload/dialog/dialog.component";
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
@@ -17,6 +18,7 @@ const appRoutes: Routes = [
     { path: 'story-builder', component: StoryBuilderComponent},
     { path: 'final-story', component: FinalStoryComponent},
     { path: 'upload-xml', component: UploadXmlComponent},
+    // { path: 'upload', component: DialogComponent},
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
 ];
