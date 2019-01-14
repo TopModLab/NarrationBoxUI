@@ -22,7 +22,7 @@ import { FinalStoryComponent } from './final-story/final-story.component'
 ;
 import { UploadXmlComponent } from './upload-xml/upload-xml.component'
 import {UploadModule} from "@app/upload/upload.module";
-import {Parser} from 'xml2js';
+// import {Parser} from 'xml2js';
 
 import { FileUploadModule } from 'ng2-file-upload';
 // import {DialogComponent} from "@app/upload/dialog/dialog.component";
@@ -33,7 +33,6 @@ import { FileUploadModule } from 'ng2-file-upload';
         ReactiveFormsModule,
         HttpClientModule,
         FileUploadModule,
-        Parser,
         routing
     ],
     declarations: [

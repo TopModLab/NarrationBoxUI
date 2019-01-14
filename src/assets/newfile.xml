@@ -1,33 +1,52 @@
 <?xml version="1.0" ?>
-<story title="StoryTitle" char1="someCharacter1" char2="someCharacter2">
+<story title="StoryTitle" char1="rabbit" char2="turtle" char3="cow">
 	<introduction> Some random text for story introduction
 	</introduction>
-	<scene id="1">
-    <image1> Character 1 image for scene 1</image1>
-    <image2> Character 2 image scene 1</image2>
-    <dialogue1> Dialogue 1 from markov </dialogue1>
-    <dialogue2> Dialogue 1 user entered  </dialogue2>
-    <dialogue3> Dialogue 2 from markov </dialogue3>
-    <dialogue4> Dialogue 2 user entered </dialogue4>
+	<scene id="1" background="">
+		<characters>
+		<character name="char3" expression="default" front-props=""/> 
+		<character name="char1" expression="anger" front-props=""/> 
+		
+		</characters>
+		<texts>
+		<text type=comment  info="'char1' came and said"/>
+		<text type=dialogue info="char3, I am angry with you"/>
+		<text type=comment  info="char3 thought"/>
+		<text type=thought info="why he is angry with me?"/>
+		</texts>
+    
 	</scene>
 
-	<scene id="2">
-    <image1> Character 1 image for scene 2</image1>
-    <image2> Character 2 image scene 2</image2>
-    <dialogue1> Dialogue 1 from markov </dialogue1>
-    <dialogue2> Dialogue 1 user entered  </dialogue2>
-    <dialogue3> Dialogue 2 from markov </dialogue3>
-    <dialogue4> Dialogue 2 user entered </dialogue4>
+	<scene id="2" background="">
+		<characters>
+		<character name="char3" expression="default" front-props=""/> 
+		<character name="char1" expression="anger" front-props=""/> 
+		
+		</characters>
+		<texts>
+		<text type=comment  info="'char1' came and said"/>
+		<text type=dialogue info="char3, I am angry with you"/>
+		<text type=comment  info="char3 thought"/>
+		<text type=thought info="why he is angry with me?"/>
+		</texts>
+    
 	</scene>
 
-	<scene id="3">
-    <image1> Character 1 image for scene 3</image1>
-    <image2> Character 2 image scene 3</image2>
-    <dialogue1> Dialogue 1 from markov </dialogue1>
-    <dialogue2> Dialogue 1 user entered  </dialogue2>
-    <dialogue3> Dialogue 2 from markov </dialogue3>
-    <dialogue4> Dialogue 2 user entered </dialogue4>
+	<scene id="3" background="">
+		<characters>
+		<character name="char3" expression="default" front-props=""/> 
+		<character name="char1" expression="anger" front-props=""/> 
+		
+		</characters>
+		<texts>
+		<text type=comment  info="'char1' came and said"/>
+		<text type=dialogue info="char3, I am angry with you"/>
+		<text type=comment  info="char3 thought"/>
+		<text type=thought info="why he is angry with me?"/>
+		</texts>
+    
 	</scene>
 
 </story>
 
+</xml>
