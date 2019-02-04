@@ -8,6 +8,7 @@ import { User } from './_models';
 @Component({ selector: 'app', templateUrl: 'app.component.html' })
 export class AppComponent implements OnInit{
     currentUser: User;
+    Titlebarflag: boolean = true;
 
     constructor(
         private router: Router,

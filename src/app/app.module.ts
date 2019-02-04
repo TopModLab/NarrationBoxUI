@@ -25,6 +25,11 @@ import {UploadModule} from "@app/upload/upload.module";
 // import {Parser} from 'xml2js';
 
 import { FileUploadModule } from 'ng2-file-upload';
+import {ConfigServiceService} from "@app/_services/config-service.service";;
+import { DownloadXMLComponent } from './download-xml/download-xml.component'
+;
+import { DownloadHtmlComponent } from './download-html/download-html.component'
+
 // import {DialogComponent} from "@app/upload/dialog/dialog.component";
 @NgModule({
     imports: [
@@ -47,11 +52,13 @@ import { FileUploadModule } from 'ng2-file-upload';
 ,
         StoryBuilderComponent ,
         FinalStoryComponent ,
-        UploadXmlComponent  ],
+        UploadXmlComponent ,
+        DownloadXMLComponent ,
+        DownloadHtmlComponent],
     providers: [
+        ConfigServiceService,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-
         // provider used to create fake backend
         fakeBackendProvider
     ],

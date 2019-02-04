@@ -1,4 +1,5 @@
-<h1> File Upload</h1>
+<span *ngIf="initial_flag">
+<h1> File Upload </h1>
 
 <!--<input ng2FileSelect type="file" accept=".xml" [uploader]="uploader"/>-->
 
@@ -8,11 +9,79 @@
 <p *ngIf="errorMessage">{{errorMessage}}</p>
 
 <br> <br>
-<textarea rows="15" cols="100" *ngIf="xmlText">{{xmlText}}</textarea>
+</span>
+<!--<textarea rows="15" cols="100" *ngIf="xmlText">{{xmlText}}</textarea>-->
 &nbsp; &nbsp; &nbsp; &nbsp;
 <!--<button *ngIf="xmlText" style="position: absolute" class="btn btn-outline-success"> Download HTML </button>-->
-<p *ngIf="introduction">{{introduction}}</p>
-<p id="demo"></p>
+<div *ngIf="showContent">
+  <!--<div class="btn-btn-primary">-->
+    <!--<a routerLink="/download-html" class="button"> View HTML </a>-->
+  <!--</div>-->
+  <!--<img [src]="images"-->
+       <!--alt="Place image title"-->
+       <!--*ngIf="!isImageLoading; else noImageFound">-->
+  <h2 align="center"> {{storyTitle}} </h2>
+  <p> {{introduction}} </p>
+<!--<ul>-->
+  <!--<li *ngFor="let scene in scenes" id="OuterDiv">-->
+    <!--{{scene}}-->
+    <!--<div class="leftpane"><img class="leftimage" [src]="images[0]">-->
+      <!--&lt;!&ndash;<a routerLink="/story-builder" class="button">Previous Scene</a>&ndash;&gt;-->
+    <!--</div>-->
+    <!--<div class="middlepane">-->
+      <!--<p>-->
+        <!--This is placeholder text for the lines that will be generated from the Markov chain. This is the first dialogue for this scene. User enters his-->
+        <!--text after this text.-->
+      <!--</p>-->
+      <!--<br>-->
+      <!--<textarea class="textArea" id="textArea1" rows="4" cols="55" placeholder="Enter first dialogue"></textarea>-->
+      <!--<br>-->
+      <!--<p>-->
+        <!--This is placeholder text for the lines that will be generated from the Markov chain. This is the second dialogue for this scene. User enters his-->
+        <!--text after this text.-->
+      <!--</p>-->
+      <!--<br>-->
+      <!--<textarea class="textArea" id="textArea2" rows="4" cols="55" placeholder="Enter second dialogue"></textarea>-->
+
+      <!--<br><br><br><br><br><br> <br>-->
+      <!--&lt;!&ndash;<div align="center">&ndash;&gt;-->
+      <!--&lt;!&ndash;<a style="padding-right: 5px" routerLink="/story-builder" class="btn btn-primary">Previous</a>&ndash;&gt;-->
+      <!--&lt;!&ndash;<a routerLink="/final-story" class="btn btn-primary">Complete Story</a>&ndash;&gt;-->
+      <!--&lt;!&ndash;<a routerLink="/story-builder" class="btn btn-primary">Add Scene</a>&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--</div>-->
+    <!--<div class="rightpane"><img class="leftimage" [src]="images[2]">-->
+      <!--&lt;!&ndash;<a routerLink="/story-builder" class="button">Add scene</a>&ndash;&gt;-->
+    <!--</div>-->
+  <!--</li>-->
+<!--</ul>-->
+  <!--Characters in this story are :-->
+  <ul>
+    <!--<p> {{characters}} </p>-->
+    <li *ngFor="let item of scenes; let i = index">
+        <div id="OuterDiv">
+       <!--{{item}}-->
+
+      <img class="leftimage" [src]="images[2*i]">
+          {{messages[4*i]}}
+          {{messages[4*i + 1]}}
+          {{messages[4*i + 2]}}
+          {{messages[4*i + 3]}}
+
+
+      <img class="rightimage" [src]="images[2*i + 1]">
+        </div>
+    </li>
+  </ul>
+
+  <!--<ul>-->
+    <!--&lt;!&ndash;<p> {{characters}} </p>&ndash;&gt;-->
+    <!--<li *ngFor="let item of messages; let i = index">-->
+      <!--{{item}}-->
+    <!--</li>-->
+  <!--</ul>-->
+  <!--<p> {{messages}}</p>-->
+</div>
 <!--<html>-->
 <!--<body>-->
 
