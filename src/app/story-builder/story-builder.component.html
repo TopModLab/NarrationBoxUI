@@ -20,9 +20,9 @@
 
     <br><br><br><br><br><br> <br>
     <div align="center">
-      <a style="padding-right: 5px" routerLink="/story-builder" class="btn btn-primary">Previous</a>
+      <a *ngIf="prevButtonFlag" style="padding-right: 5px" routerLink="/story-builder" class="btn btn-primary" (click)="prevClicked()">Previous</a>
       <a routerLink="/final-story" class="btn btn-primary">Complete Story</a>
-      <a routerLink="/story-builder" class="btn btn-primary">Add Scene</a>
+      <a routerLink="/story-builder" class="btn btn-primary" (click)="nextClicked()">Add Scene</a>
     </div>
   </div>
   <div class="rightpane"><img class="leftimage" src="assets/img/angular-logo.png">

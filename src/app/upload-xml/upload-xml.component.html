@@ -13,7 +13,8 @@
 <!--<textarea rows="15" cols="100" *ngIf="xmlText">{{xmlText}}</textarea>-->
 &nbsp; &nbsp; &nbsp; &nbsp;
 <!--<button *ngIf="xmlText" style="position: absolute" class="btn btn-outline-success"> Download HTML </button>-->
-<div *ngIf="showContent">
+<div style="font-family: Arial" *ngIf="showContent" id="OuterDiv">
+  <br>
   <!--<div class="btn-btn-primary">-->
     <!--<a routerLink="/download-html" class="button"> View HTML </a>-->
   <!--</div>-->
@@ -21,194 +22,60 @@
        <!--alt="Place image title"-->
        <!--*ngIf="!isImageLoading; else noImageFound">-->
   <h2 align="center"> {{storyTitle}} </h2>
+  <br><br>
   <p> {{introduction}} </p>
-<!--<ul>-->
-  <!--<li *ngFor="let scene in scenes" id="OuterDiv">-->
-    <!--{{scene}}-->
-    <!--<div class="leftpane"><img class="leftimage" [src]="images[0]">-->
-      <!--&lt;!&ndash;<a routerLink="/story-builder" class="button">Previous Scene</a>&ndash;&gt;-->
-    <!--</div>-->
-    <!--<div class="middlepane">-->
-      <!--<p>-->
-        <!--This is placeholder text for the lines that will be generated from the Markov chain. This is the first dialogue for this scene. User enters his-->
-        <!--text after this text.-->
-      <!--</p>-->
-      <!--<br>-->
-      <!--<textarea class="textArea" id="textArea1" rows="4" cols="55" placeholder="Enter first dialogue"></textarea>-->
-      <!--<br>-->
-      <!--<p>-->
-        <!--This is placeholder text for the lines that will be generated from the Markov chain. This is the second dialogue for this scene. User enters his-->
-        <!--text after this text.-->
-      <!--</p>-->
-      <!--<br>-->
-      <!--<textarea class="textArea" id="textArea2" rows="4" cols="55" placeholder="Enter second dialogue"></textarea>-->
-
-      <!--<br><br><br><br><br><br> <br>-->
-      <!--&lt;!&ndash;<div align="center">&ndash;&gt;-->
-      <!--&lt;!&ndash;<a style="padding-right: 5px" routerLink="/story-builder" class="btn btn-primary">Previous</a>&ndash;&gt;-->
-      <!--&lt;!&ndash;<a routerLink="/final-story" class="btn btn-primary">Complete Story</a>&ndash;&gt;-->
-      <!--&lt;!&ndash;<a routerLink="/story-builder" class="btn btn-primary">Add Scene</a>&ndash;&gt;-->
-      <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--</div>-->
-    <!--<div class="rightpane"><img class="leftimage" [src]="images[2]">-->
-      <!--&lt;!&ndash;<a routerLink="/story-builder" class="button">Add scene</a>&ndash;&gt;-->
-    <!--</div>-->
-  <!--</li>-->
-<!--</ul>-->
-  <!--Characters in this story are :-->
-  <ul>
-    <!--<p> {{characters}} </p>-->
-    <li *ngFor="let item of scenes; let i = index">
-        <div id="OuterDiv">
-       <!--{{item}}-->
-
-      <img class="leftimage" [src]="images[2*i]">
-          {{messages[4*i]}}
-          {{messages[4*i + 1]}}
-          {{messages[4*i + 2]}}
-          {{messages[4*i + 3]}}
-
-
-      <img class="rightimage" [src]="images[2*i + 1]">
-        </div>
-    </li>
-  </ul>
-
-  <!--<ul>-->
+  <table style="width: revert">
+    <!--<thead>-->
+    <!--<tr>-->
+      <!--<th> 1 </th>-->
+      <!--<th> 2 </th>-->
+      <!--<th> 3 </th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <tbody>
+    <tr *ngFor="let item of scenes; let i = index">
+      <td><img [src]="imageRequests[2*i].blob" [width]="200" [height]="300"></td>
+      <td>
+        {{messages[4*i]}}
+        <br>
+        {{messages[4*i + 1]}}
+        <br>
+        {{messages[4*i + 2]}}
+        <br>
+        {{messages[4*i + 3]}}
+        <br>
+      </td>
+      <td>
+        <img [src]="imageRequests[2*i + 1].blob" [width]="200" [height]="300">
+      </td>
+      <hr>
+    </tr>
+    </tbody>
+  </table>
+  <!--<ul style="list-style: none;">-->
     <!--&lt;!&ndash;<p> {{characters}} </p>&ndash;&gt;-->
-    <!--<li *ngFor="let item of messages; let i = index">-->
-      <!--{{item}}-->
+    <!--<li *ngFor="let item of scenes; let i = index">-->
+        <!--&lt;!&ndash;<div id="InnerDiv">&ndash;&gt;-->
+       <!--&lt;!&ndash;{{item}}&ndash;&gt;-->
+          <!--<div class="leftpane">-->
+            <!--<img class="leftimage" [src]="images[2*i]">-->
+          <!--</div>-->
+
+       <!--<div class="middlepane">-->
+          <!--{{messages[4*i]}}-->
+          <!--<br><br>-->
+          <!--{{messages[4*i + 1]}}-->
+          <!--<br><br>-->
+          <!--{{messages[4*i + 2]}}-->
+          <!--<br><br>-->
+          <!--{{messages[4*i + 3]}}-->
+          <!--<br><br>-->
+       <!--</div>-->
+        <!--<div class="rightpane">-->
+          <!--<img class="leftimage" [src]="images[2*i + 1]">-->
+        <!--</div>-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
     <!--</li>-->
   <!--</ul>-->
-  <!--<p> {{messages}}</p>-->
+
 </div>
-<!--<html>-->
-<!--<body>-->
-
-<!--<div class="middlepane">-->
-<!--<div class="form-group col-md-6" style="margin-left:50%;margin-top:-20%" >-->
-  <!--<input type="file" value="upload" accept=".jpg" (change)=fileUploader($event)>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="frame">-->
-  <!--<div class="center">-->
-    <!--<div class="bar"></div>-->
-    <!--<div class="title">Drop file to upload</div>-->
-    <!--<div class="dropzone">-->
-      <!--<div class="content">-->
-        <!--<img src="http://100dayscss.com/codepen/upload.svg" class="upload">-->
-        <!--<span class="filename"></span>-->
-        <!--<input type="file" class="input">-->
-      <!--</div>-->
-    <!--</div>-->
-    <!--<img src="http://100dayscss.com/codepen/syncing.svg" class="syncing">-->
-    <!--<img src="http://100dayscss.com/codepen/checkmark.svg" class="done">-->
-    <!--<div class="upload-btn">Upload file</div>-->
-  <!--</div>-->
-<!--</div>-->
-
-
-<!--<input type='file' accept='text/plain' multiple (change)='openFile($event)'>-->
-
-<!--<p id="demo"></p>-->
-
-<!--<script type="text/javascript">-->
-  <!--let parser, xmlDoc;-->
-  <!--let text = "<bookstore><book>" +-->
-    <!--"<title>Everyday Italian</title>" +-->
-    <!--"<author>Giada De Laurentiis</author>" +-->
-    <!--"<year>2005</year>" +-->
-    <!--"<title>Everyday Mexican</title>" +-->
-    <!--"<author>Giada De Laurentiis</author>" +-->
-    <!--"<year>2005</year>" +-->
-    <!--"</book></bookstore>"; ;-->
-
-  <!--parser = new DOMParser();-->
-  <!--xmlDoc = parser.parseFromString(text,"text/xml");-->
-
-  <!--document.getElementById("demo").innerHTML =-->
-    <!--xmlDoc.getElementsByTagName("title")[1].childNodes[0].nodeValue;-->
-<!--</script>-->
-
-<!--</body>-->
-<!--</html>-->
-
-
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-  <!--<title></title>-->
-  <!--&lt;!&ndash; Ignite UI Required Combined CSS Files &ndash;&gt;-->
-  <!--<link href="http://cdn-na.infragistics.com/igniteui/2018.2/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" />-->
-  <!--<link href="http://cdn-na.infragistics.com/igniteui/2018.2/latest/css/structure/infragistics.css" rel="stylesheet" />-->
-
-  <!--<script src="http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.8.3.js"></script>-->
-  <!--<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>-->
-  <!--<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>-->
-
-  <!--&lt;!&ndash; Ignite UI Required Combined JavaScript Files &ndash;&gt;-->
-  <!--<script src="http://cdn-na.infragistics.com/igniteui/2018.2/latest/js/infragistics.core.js"></script>-->
-  <!--<script src="http://cdn-na.infragistics.com/igniteui/2018.2/latest/js/infragistics.lob.js"></script>-->
-
-  <!--<style type="text/css">-->
-    <!--.container-info, .error-info {-->
-      <!--margin: 10px 0;-->
-      <!--font-weight: bold;-->
-    <!--}-->
-
-    <!--.error-info {-->
-      <!--color: #FF0000;-->
-    <!--}-->
-  <!--</style>-->
-<!--</head>-->
-<!--<body>-->
-<!--<div id="igUpload"></div>-->
-<!--<div class="container-info">-->
-  <!--<label>-->
-    <!--Average Speed:-->
-    <!--<span id="speed">0</span>-->
-    <!--KB/S-->
-  <!--</label>-->
-<!--</div>-->
-<!--<div class="container-info">-->
-  <!--<label>-->
-    <!--Uploaded Files:-->
-    <!--<span id="uploadedFiles">0</span>-->
-  <!--</label>-->
-<!--</div>-->
-<!--<div class="container-info">-->
-  <!--<label>-->
-    <!--Uploaded:-->
-    <!--<span id="uploaded">0</span>-->
-    <!--KB-->
-  <!--</label>-->
-<!--</div>-->
-<!--<div class="container-info">-->
-  <!--<label>-->
-    <!--To be uploaded:-->
-    <!--<span id="toUpload">0</span>-->
-    <!--KB-->
-  <!--</label>-->
-<!--</div>-->
-<!--<div class="container-info">-->
-  <!--<label>-->
-    <!--Time Elapsed:-->
-    <!--<span id="timeElapsed">0</span>-->
-    <!--sec-->
-  <!--</label>-->
-<!--</div>-->
-<!--<div class="container-info">-->
-  <!--<label>-->
-    <!--Time Left:-->
-    <!--<span id="timeLeft">0</span>-->
-    <!--sec-->
-  <!--</label>-->
-<!--</div>-->
-<!--<div id="error" class="error-info">-->
-  <!--You cannot upload files larger than 1 MB-->
-<!--</div>-->
-<!--<input type="hidden" id="hdnStartTimer" value="false" />-->
-
-<!--<script src="https://www.igniteui.com/TypeScriptSamples/file-upload/typescript.js"></script>-->
-<!--</body>-->
-<!--</html>-->

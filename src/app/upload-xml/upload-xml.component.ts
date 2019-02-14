@@ -32,22 +32,19 @@ export class UploadXmlComponent implements OnInit {
   messages:string[] = new Array();
   characters:string[] = new Array();
   images: string[] = new Array();
-  //characters: string[];
-  // firstDialogues: any;
-  // secondDialogues: any;
-  // thirsDialogues: any;
-  // fourthDialogues: any;
-  // public xmlItems: any;
+  imageRequests: object[] = new Array();
+
 
   constructor(private imageService: ConfigServiceService) {
 
   }
 
-  createImageFromBlob(image: Blob) {
+  createImageFromBlob(image: Blob, imageRequest: any) {
     let reader = new FileReader();
     //console.log(image);
     reader.addEventListener("load", () => {
       this.images.push((reader.result).toString());
+      imageRequest.blob = (reader.result).toString();
     }, false);
 
     //console.log(this.images);
@@ -66,6 +63,7 @@ export class UploadXmlComponent implements OnInit {
     //let characters = new Array();
     //let messages = new Array();
     let reader = new FileReader();
+
     this.selectedFile = <File>event.target.files[0];
     if(this.selectedFile.type == "text/xml"){
        this.errorMessage = "";
@@ -109,7 +107,12 @@ export class UploadXmlComponent implements OnInit {
           console.log(y);
           //let arr = Array.from(y);
           for (let j=0; j < y.length; j++){
-            this.messages.push((y[j].getAttribute('info')).toString());
+            if(y[j].getAttribute('type').toString() != "comment") {
+              this.messages.push(" \" " + (y[j].getAttribute('info')).toString() + " \" ");
+            }
+            else {
+              this.messages.push((y[j].getAttribute('info')).toString());
+            }
           }
           //y = x.getElement
           let k = x[i].getElementsByTagName('char');
@@ -120,13 +123,24 @@ export class UploadXmlComponent implements OnInit {
             // subscribe((data: ConfigServiceService) => this.config);
             // console.log(this.config);
             this.isImageLoading = true;
+            let imageRequest = {
+              resolved: false,
+              error: false,
+              blob: null
+            };
+
             this.imageService.getConfig("https://narration-box.herokuapp.com/images/"+id+"?emotion="+emotion).subscribe(data => {
-              this.createImageFromBlob(data);
+              this.createImageFromBlob(data, imageRequest);
               this.isImageLoading = false;
+              imageRequest.resolved = true;
             }, error => {
               this.isImageLoading = false;
+              imageRequest.resolved = true;
+              imageRequest.error = true;
               console.log(error);
             });
+
+            this.imageRequests.push(imageRequest);
             //console.log(this.http.get("https://narration-box.herokuapp.com/images/"+id+"?emotion="+emotion));
             //console.log(this.http.get("https://narration-box.herokuapp.com/images/"+id+"?emotion="+emotion));
           }
@@ -138,8 +152,6 @@ export class UploadXmlComponent implements OnInit {
         this.no_of_scenes = (this.messages.length)/4;
 
         this.scenes = Array(this.no_of_scenes).fill(0).map((x,i)=>i);
-
-        // get images by get request
 
 
 
@@ -157,62 +169,6 @@ export class UploadXmlComponent implements OnInit {
     //   console.log(result);
     // });
      console.log(this.selectedFile);
-  }
-
-  // code to upload file
-  // onUpload(){
-  //   const fd = new FormData();
-  //   fd.append('xml', this.selectedFile, this.selectedFile.name);
-  //   this.http.post('localhost:8000/upload', fd, {
-  //     reportProgress: true,
-  //     observe:'events'
-  //   })
-  //     .subscribe(event => {
-  //       if (event.type === HttpEventType.UploadProgress){
-  //         console.log('Upload Progress: '+ event.loaded / event.total * 100 + '%');
-  //       }
-  //       else if(event.type === HttpEventType.Response){
-  //         console.log(event);
-  //       }
-  //
-  //     });
-  // }
-
-  // parseXML(data)
-  // {
-  //   return new Promise(resolve =>
-  //   {
-  //     let k,
-  //       arr    = [],
-  //       parser = new xml2js.Parser(
-  //         {
-  //           trim: true,
-  //           explicitArray: true
-  //         });
-  //
-  //     parser.parseString(data, function (err, result)
-  //     {
-  //       let obj = result.story;
-  //       for(k in obj.scene)
-  //       {
-  //         let item = obj.scene[k];
-  //         arr.push({
-  //           image1           : item.image1[0],
-  //           image2           : item.image2[0],
-  //           dialogue1        : item.dialogue1[0],
-  //           dialogue2        : item.dialogue2[0],
-  //           dialogue3        : item.dialogue3[0],
-  //           dialogue4        : item.dialogue4[0]
-  //         });
-  //       }
-  //
-  //       resolve(arr);
-  //     });
-  //   });
-  // }
-
-  StoryTitle(){
-    return this.storyTitle;
   }
 
   ngOnInit() {
