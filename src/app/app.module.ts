@@ -29,6 +29,8 @@ import {ConfigServiceService} from "@app/_services/config-service.service";;
 import { DownloadXMLComponent } from './download-xml/download-xml.component'
 ;
 import { DownloadHtmlComponent } from './download-html/download-html.component'
+import { FormsModule} from "@angular/forms";;
+import { ViewXmlComponent } from './view-xml/view-xml.component'
 
 // import {DialogComponent} from "@app/upload/dialog/dialog.component";
 @NgModule({
@@ -38,7 +40,8 @@ import { DownloadHtmlComponent } from './download-html/download-html.component'
         ReactiveFormsModule,
         HttpClientModule,
         FileUploadModule,
-        routing
+        routing,
+        FormsModule
     ],
     declarations: [
         AppComponent,
@@ -54,7 +57,8 @@ import { DownloadHtmlComponent } from './download-html/download-html.component'
         FinalStoryComponent ,
         UploadXmlComponent ,
         DownloadXMLComponent ,
-        DownloadHtmlComponent],
+        DownloadHtmlComponent,
+        ViewXmlComponent],
     providers: [
         ConfigServiceService,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

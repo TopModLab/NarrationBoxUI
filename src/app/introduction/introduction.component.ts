@@ -7,8 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IntroductionComponent implements OnInit {
 
-  public storyTitle = "Title";
-  // public introduction = "Once upon a time, there was a group of animals in some zoo. The whale and sea horse were good friends......";
+  public storyTitle = "Animal Kingdom";
+  public introduction = "This story has characters, Tom the shark, Jerry the Octopus and Quirky the sealion. The relationship between them is defined as " +
+    "per the markov chain.";
 
   constructor() { }
 
