@@ -10,3 +10,4 @@ export class AppData {
     public imageRequest2: object
   ) {}
 }
+

@@ -31,6 +31,7 @@ import { DownloadXMLComponent } from './download-xml/download-xml.component'
 import { DownloadHtmlComponent } from './download-html/download-html.component'
 import { FormsModule} from "@angular/forms";;
 import { ViewXmlComponent } from './view-xml/view-xml.component'
+import {DataService} from "@app/_services/xml_data.service";
 
 // import {DialogComponent} from "@app/upload/dialog/dialog.component";
 @NgModule({
@@ -61,6 +62,7 @@ import { ViewXmlComponent } from './view-xml/view-xml.component'
         ViewXmlComponent],
     providers: [
         ConfigServiceService,
+        DataService,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         // provider used to create fake backend
