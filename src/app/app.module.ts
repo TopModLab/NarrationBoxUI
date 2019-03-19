@@ -31,7 +31,8 @@ import { DownloadXMLComponent } from './download-xml/download-xml.component'
 import { DownloadHtmlComponent } from './download-html/download-html.component'
 import { FormsModule} from "@angular/forms";;
 import { ViewXmlComponent } from './view-xml/view-xml.component'
-import {DataService} from "@app/_services/xml_data.service";
+import {DataService} from "@app/_services/xml_data.service";;
+import { ViewHtmlComponent } from './view-html/view-html.component'
 
 // import {DialogComponent} from "@app/upload/dialog/dialog.component";
 @NgModule({
@@ -59,7 +60,10 @@ import {DataService} from "@app/_services/xml_data.service";
         UploadXmlComponent ,
         DownloadXMLComponent ,
         DownloadHtmlComponent,
-        ViewXmlComponent],
+        ViewXmlComponent,
+        ViewHtmlComponent
+    ]
+        ,
     providers: [
         ConfigServiceService,
         DataService,

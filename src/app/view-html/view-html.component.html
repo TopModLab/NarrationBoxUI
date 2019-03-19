@@ -1,0 +1,35 @@
+<div style="font-family: Arial" id="OuterDiv">
+  <br>
+  <h2 align="center"> {{storyTitle}} </h2>
+  <br><br>
+  <p> {{introduction}} </p>
+  <table style="width: revert">
+    <!--<thead>-->
+    <!--<tr>-->
+    <!--<th> 1 </th>-->
+    <!--<th> 2 </th>-->
+    <!--<th> 3 </th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <tbody>
+    <tr *ngFor="let item of scenes; let i = index">
+      <td><img [src]="imageRequests[2*i].blob" [width]="200" [height]="300"></td>
+      <td>
+        {{messages[4*i]}}
+        <br>
+        {{messages[4*i + 1]}}
+        <br>
+        {{messages[4*i + 2]}}
+        <br>
+        {{messages[4*i + 3]}}
+        <br>
+      </td>
+      <td>
+        <img [src]="imageRequests[2*i + 1].blob" [width]="200" [height]="300">
+      </td>
+      <hr>
+    </tr>
+    </tbody>
+  </table>
+
+</div>

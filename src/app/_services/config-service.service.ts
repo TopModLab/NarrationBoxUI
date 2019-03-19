@@ -43,4 +43,7 @@ export class ConfigServiceService {
     //return this.http.get(url);
   }
 
+  getStory(url: string): Observable<any>{
+    return this.http.get(url);
+  }
 }

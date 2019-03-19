@@ -5,6 +5,7 @@ import {IPanel} from "@app/panel";
 
 import {AppData} from "@app/AppData";
 import {INextPanel} from "@app/addNextPanel";
+import {DataService} from "@app/_services/xml_data.service";
 
 @Component({
   selector: 'app-story-builder',
@@ -37,7 +38,7 @@ export class StoryBuilderComponent implements OnInit {
   textarea1: string;
   textarea2: string;
 
-  constructor(private requestService: ConfigServiceService) { }
+  constructor(private requestService: ConfigServiceService, private xml_data: DataService) { }
 
   prevClicked(){
 
@@ -92,6 +93,8 @@ export class StoryBuilderComponent implements OnInit {
           panel.character_name = data['identity']['id'];
           console.log(panel);
           this.panelElements.push(panel);
+
+          // this.xml_data.changePanelElements(this.panelElements);
 
           let imageRequest: object;
           imageRequest = this.getImage(panel);
@@ -221,6 +224,9 @@ export class StoryBuilderComponent implements OnInit {
     // TODO: Important
     if(this.scene_number == this.number_of_scenes + 1){
       this.number_of_scenes += 1;
+
+      this.xml_data.changeNumberOfScenes(this.number_of_scenes);
+
       this.requestService.post("http://narration-box.herokuapp.com/stories/newPanel?storyId=3").subscribe (data => {
         this.createScene(data)
       });

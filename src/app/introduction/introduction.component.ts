@@ -29,6 +29,7 @@ export class IntroductionComponent implements OnInit {
 
   InitiateData(){
     this.data.changeTitle(this.storyTitle);
+    this.data.changeIntroduction(this.introduction);
   }
 
 }

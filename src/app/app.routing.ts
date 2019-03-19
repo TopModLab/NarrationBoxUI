@@ -11,6 +11,7 @@ import {UploadXmlComponent} from '@app/upload-xml/upload-xml.component';
 import {DownloadXMLComponent} from "@app/download-xml/download-xml.component";
 import {DownloadHtmlComponent} from "@app/download-html/download-html.component";
 import {ViewXmlComponent} from "@app/view-xml/view-xml.component";
+import {ViewHtmlComponent} from "@app/view-html/view-html.component";
 // import {DialogComponent} from "@app/upload/dialog/dialog.component";
 
 const appRoutes: Routes = [
@@ -24,6 +25,7 @@ const appRoutes: Routes = [
     { path: 'download-xml', component: DownloadXMLComponent},
     { path: 'download-html', component: DownloadHtmlComponent},
     { path: 'view-xml', component: ViewXmlComponent},
+    { path: 'view-html', component: ViewHtmlComponent},
     // { path: 'upload', component: DialogComponent},
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
