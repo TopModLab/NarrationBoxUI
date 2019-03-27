@@ -14,26 +14,24 @@ import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { HomeComponent } from './home';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';;
-import { IntroductionComponent } from './introduction/introduction.component'
-;
-import { StoryBuilderComponent } from './story-builder/story-builder.component'
-;
-import { FinalStoryComponent } from './final-story/final-story.component'
-;
+import { IntroductionComponent } from './introduction/introduction.component';
+import { StoryBuilderComponent } from './story-builder/story-builder.component';
+import { FinalStoryComponent } from './final-story/final-story.component';
 import { UploadXmlComponent } from './upload-xml/upload-xml.component'
 import {UploadModule} from "@app/upload/upload.module";
 // import {Parser} from 'xml2js';
 
 import { FileUploadModule } from 'ng2-file-upload';
-import {ConfigServiceService} from "@app/_services/config-service.service";;
-import { DownloadXMLComponent } from './download-xml/download-xml.component'
-;
+import {ConfigServiceService} from "@app/_services/config-service.service";
+import { DownloadXMLComponent } from './download-xml/download-xml.component';
+
 import { DownloadHtmlComponent } from './download-html/download-html.component'
-import { FormsModule} from "@angular/forms";;
+import { FormsModule} from "@angular/forms";
 import { ViewXmlComponent } from './view-xml/view-xml.component'
-import {DataService} from "@app/_services/xml_data.service";;
+import {DataService} from "@app/_services/xml_data.service";
 import { ViewHtmlComponent } from './view-html/view-html.component'
 
+import { MatCheckboxModule } from '@angular/material/checkbox';
 // import {DialogComponent} from "@app/upload/dialog/dialog.component";
 @NgModule({
     imports: [
@@ -43,7 +41,8 @@ import { ViewHtmlComponent } from './view-html/view-html.component'
         HttpClientModule,
         FileUploadModule,
         routing,
-        FormsModule
+        FormsModule,
+        MatCheckboxModule
     ],
     declarations: [
         AppComponent,

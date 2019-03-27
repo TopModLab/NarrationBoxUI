@@ -1,18 +1,32 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from "rxjs";
 import {IState} from "@app/state";
 import {IPanel} from "@app/panel";
 import {INextPanel} from "@app/addNextPanel";
+import {CreateStoryRequestBody} from "@app/create-story-request-body";
+import {RequestOptions} from "@angular/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigServiceService {
 
+  // httpOptions = {
+  //   headers: new HttpHeaders().set('Content-type' = 'application/json')
+  // };
   // private result: Observable<Blob>;
 
   constructor(private http: HttpClient) { }
+
+  addStory(url: string, obj: CreateStoryRequestBody): Observable<IState> {
+    let body = JSON.stringify(obj);
+    let header = new HttpHeaders({'content-type': 'application/json'});
+    // let headers = new Headers({ 'Content-Type': 'application/json' });
+    // let options = new RequestOptions({ headers: headers });
+
+    return this.http.post<IState>(url, body, {headers: header});
+  }
 
    getConfig(url: string): Observable<Blob>  {
     // this.result = await this.http.get(url, {responseType: 'blob'})

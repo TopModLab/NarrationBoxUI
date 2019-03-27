@@ -15,7 +15,7 @@ export class ViewXmlComponent implements OnInit {
   introduction: string;
   number_of_scenes: number;
   xml_file: string;
-  ret = new Array();
+  ret = new Array()
 
 
 

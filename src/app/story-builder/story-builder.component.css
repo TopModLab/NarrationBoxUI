@@ -2,7 +2,33 @@
 
 }
 
-#OuterDiv{
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+
+#OuterDiv2{
+  border: 1px solid black;
+  /*background: azure;*/
+  width: 100%;
+  height: auto;
+  flex-grow: 1;
+  /*font-family: 'Montserrat';*/
+  font-size: 16px;
+  padding: 20px;
+  position: relative;
+}
+
+
+#OuterDiv1{
   border: 1px solid black;
   background: azure;
   width: 100%;

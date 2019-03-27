@@ -15,6 +15,10 @@ import {DataService} from "@app/_services/xml_data.service";
 
 export class StoryBuilderComponent implements OnInit {
 
+  xml_file: string;
+  ret = new Array();
+  storyTitle: string;
+
   userEnteredText: string[] = new Array();
   markovGeneratedTexts: string[] = new Array();
   number_of_scenes: number = 0;
@@ -24,6 +28,13 @@ export class StoryBuilderComponent implements OnInit {
 
   scene_number: number = 1;
   prevButtonFlag: boolean = false;
+
+  buildMode: boolean = true;
+  selectionMode: boolean = false;
+  viewXMLMode: boolean = false;
+  viewHTMLMode: boolean = false;
+
+  
   //scenes: Scene[] = new Array();
   character: object;
   number_of_characters: number = 3;
@@ -82,26 +93,30 @@ export class StoryBuilderComponent implements OnInit {
   }
 
   async createFirstSceneHelper(state: IState) {
+      let count = 0;
       for(let character of state.panels[0].characters){
         console.log("Character");
+        if(count < 2) {
+          count += 1;
+          await this.getCharacterName(character["character-name"]).then(data => {
+            const panel = {} as IPanel;
+            panel.character_id = character["character-name"];
+            panel.emotional = character["emotional"];
+            panel.causality = "";
+            panel.character_name = data['identity']['id'];
+            console.log(panel);
+            this.panelElements.push(panel);
 
-        await this.getCharacterName(character["character-name"]).then(data => {
-          const panel = {} as IPanel;
-          panel.character_id = character["character-name"];
-          panel.emotional = character["emotional"];
-          panel.causality = "";
-          panel.character_name = data['identity']['id'];
-          console.log(panel);
-          this.panelElements.push(panel);
+            // this.xml_data.changePanelElements(this.panelElements);
 
-          // this.xml_data.changePanelElements(this.panelElements);
+            let imageRequest: object;
+            imageRequest = this.getImage(panel);
+            this.imageRequests.push(imageRequest);
+            console.log("Image Request: ");
+          });
+        }
+        }
 
-          let imageRequest: object;
-          imageRequest = this.getImage(panel);
-          this.imageRequests.push(imageRequest);
-          console.log("Image Request: ");
-        });
-      }
     }
 
   createFirstScene(state: IState){
@@ -125,6 +140,36 @@ export class StoryBuilderComponent implements OnInit {
 
   }
 
+  async getDefaultImage(panel: IPanel){
+    let imageRequest = {
+      resolved: false,
+      error: false,
+      blob: null
+    };
+
+    let url = "https://narration-box.herokuapp.com/images/" + panel.character_name + "?emotion=default";
+    console.log(url);
+    await this.requestService.getConfig(url).subscribe(data => {
+
+      console.log("----------------------->>>", data.size, panel.character_name, panel.emotional);
+      if (data.size > 0) {
+        this.createImageFromBlob(data, imageRequest);
+        this.isImageLoading = false;
+        imageRequest.resolved = true;
+      }
+    },
+      error => {
+        this.isImageLoading = false;
+        imageRequest.resolved = true;
+        imageRequest.error = true;
+        console.log(error);
+      });
+
+    console.log("Getting image done", imageRequest, url);
+
+    return imageRequest;
+  }
+
   getImage(panel: IPanel){
     console.log("Getting Image");
     this.isImageLoading = true;
@@ -137,16 +182,41 @@ export class StoryBuilderComponent implements OnInit {
     let url = "https://narration-box.herokuapp.com/images/" + panel.character_name + "?emotion=" + panel.emotional;
     console.log(url);
     this.requestService.getConfig(url).subscribe(data => {
-      this.createImageFromBlob(data, imageRequest);
-      this.isImageLoading = false;
-      imageRequest.resolved = true;
+
+      console.log("----------------------->>>",data.size, panel.character_name, panel.emotional);
+      if(data.size > 0) {
+
+        this.createImageFromBlob(data, imageRequest);
+        this.isImageLoading = false;
+        imageRequest.resolved = true;
+      }
+      else{
+
+        return this.getDefaultImage(panel);
+
+        // imageRequest.blob = "@assets/img/"+panel.character_name+"_default.png";
+        // url = "https://narration-box.herokuapp.com/images/" + panel.character_name + "?emotion=default";
+        // await this.requestService.getConfig(url).subscribe(data => {
+        //   console.log("Loading default");
+        //   this.createImageFromBlob(data, imageRequest);
+        //   this.isImageLoading = false;
+        //   imageRequest.resolved = true;
+        // },error => {
+        //     this.isImageLoading = false;
+        //     imageRequest.resolved = true;
+        //     imageRequest.error = true;
+        //     console.log(error);
+        //   }
+        //   );
+      }
     }, error => {
       this.isImageLoading = false;
       imageRequest.resolved = true;
       imageRequest.error = true;
       console.log(error);
     });
-    console.log("Getting image done", imageRequest);
+
+    console.log("Getting image done", imageRequest, url);
     return imageRequest;
   }
 
@@ -198,6 +268,7 @@ export class StoryBuilderComponent implements OnInit {
       this.userEnteredText.push(this.data.user_entered_dialogue1);
       this.userEnteredText.push(this.data.user_entered_dialogue2);
 
+      console.log("--- panel elements: === ", this.panelElements);
       // setTimeout(function () {
       //
       // }, 2000);
@@ -263,9 +334,105 @@ export class StoryBuilderComponent implements OnInit {
   }
 
   completeStory(){
+    this.selectionMode = true;
+    this.buildMode = false;
+    this.viewXMLMode = false;
+    this.viewHTMLMode = false;
+
+    if(this.scene_number == this.number_of_scenes) {
+
+      this.userEnteredText.push(this.data.user_entered_dialogue1);
+      this.userEnteredText.push(this.data.user_entered_dialogue2);
+    }
+
+
+    let url = "http://narration-box.herokuapp.com/stories/{id}?id=3";
+    this.requestService.getStory(url).subscribe (data => {
+      this.extractStoryInfo(data)
+    });
+
 
   }
 
+  viewHTMLClicked(){
+    this.selectionMode = false;
+    this.buildMode = false;
+    this.viewXMLMode = false;
+    this.viewHTMLMode = true;
+
+
+
+  }
+
+  viewXMLClicked(){
+    this.selectionMode = false;
+    this.buildMode = false;
+    this.viewXMLMode = true;
+    this.viewHTMLMode = false;
+    //
+    // let url = "http://narration-box.herokuapp.com/stories/{id}?id=3";
+    //
+    // this.requestService.getStory(url).subscribe (data => {
+    //   this.extractStoryInfo(data)
+    // });
+
+    // make XML
+    let XMLWriter = require('xml-writer');
+    let xw = new XMLWriter;
+    xw.startDocument();
+    xw.startElement('story');
+    xw.writeAttribute('title', this.storyTitle);
+    //xw = xw.toString() + '\n';
+
+    xw.startElement('introduction');
+    xw.writeAttribute('info', ""); // fill introduction
+    //xw = xw.toString() + '\n';
+
+    xw.endElement('introduction');
+    xw = xw.toString() + '\n';
+
+    for(let i = 0 ; i < this.number_of_scenes; i++){
+      xw.startElement('scene');
+      xw.writeAttribute('id', ""+ (i+1));
+      xw.writeAttribute('background', " ");
+      //xw = xw.toString() + '\n';
+
+      xw.startElement('characters');
+      //xw = xw.toString() + '\n';
+
+      for(let j = 0; j < 2; j++){
+
+      }
+      xw.endElement('characters');
+      //xw = xw.toString() + '\n';
+      xw.endElement('scene');
+      //xw = xw.toString() + '\n';
+    }
+
+    // xw.text('Some content');
+
+
+    xw.endDocument();
+
+    console.log(xw.toString());
+
+    this.xml_file = xw.toString();
+
+  }
+
+  extractStoryInfo(response: any){
+    console.log(response.title);
+    this.storyTitle = response.title;
+
+  }
+
+
+  returnClicked(){
+    this.selectionMode = false;
+    this.buildMode = true;
+    this.viewXMLMode = false;
+    this.viewHTMLMode = false;
+  }
   ngOnInit() {
     console.log("Start");
     let url = "http://narration-box.herokuapp.com/stories/{id}?id=3";

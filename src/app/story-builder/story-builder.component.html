@@ -1,5 +1,6 @@
+<div *ngIf="buildMode">
 <h4> Scene number: {{scene_number}} </h4>
-<div id="OuterDiv">
+<div id="OuterDiv1">
 
   <div class="leftpane">
     <div *ngIf="data && data.imageRequest1 && data.imageRequest1.blob">
@@ -21,7 +22,7 @@
     <br><br><br><br><br><br><br>
     <div align="center">
       <a *ngIf="prevButtonFlag" style="padding-right: 5px" routerLink="/story-builder" class="btn btn-primary" (click)="prevClicked()">Previous</a>
-      <a routerLink="/final-story" class="btn btn-primary" (click)="completeStory()">Complete Story</a>
+      <a class="btn btn-primary" (click)="completeStory()">Complete Story</a>
       <a routerLink="/story-builder" class="btn btn-primary" (click)="nextClicked()"> Next </a>
     </div>
   </div>
@@ -33,3 +34,64 @@
     <!--<a routerLink="/story-builder" class="button">Add scene</a>-->
   </div>
 </div>
+</div>
+
+<div *ngIf="selectionMode">
+  <div align="center">
+    <button class="btn btn-outline-success btn-block" (click)="viewHTMLClicked()"> View HTML </button>
+    <br><br>
+    <button class="btn btn-outline-success btn-block" (click)="viewXMLClicked()"> View XML </button>
+    <br><br>
+
+    <a class="btn btn-outline-primary btn-block" (click)="returnClicked()" > Return to Story Edit </a>
+
+  </div>
+</div>
+
+&nbsp; &nbsp; &nbsp;
+<div *ngIf="viewHTMLMode">
+
+  <div style="font-family: Arial" id="OuterDiv2">
+    <br>
+    <h2 align="center"> {{storyTitle}} </h2>
+    <br><br>
+    <!--<p> {{introduction}} </p>-->
+    <table style="width: revert">
+      <tbody>
+      <tr *ngFor="let dummy of ' '.repeat(number_of_scenes).split(''); let i = index">
+        <td><img [src]="imageRequests[2*i].blob" [width]="200" [height]="300"></td>
+        <td>
+          {{markovGeneratedTexts[2*i]}}
+          <br>
+          {{userEnteredText[2*i]}}
+          <br>
+          {{markovGeneratedTexts[2*i + 1]}}
+          <br>
+          {{userEnteredText[2*i + 1]}}
+          <br>
+        </td>
+        <td>
+          <img [src]="imageRequests[2*i + 1].blob" [width]="200" [height]="300">
+        </td>
+        <hr>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+
+<div *ngIf="viewXMLMode">
+
+  <p>
+
+
+    <!--<tr *ngFor="let sentence in ret; let i = index">-->
+    {{xml_file}}
+
+  </p>
+
+
+</div>
+
