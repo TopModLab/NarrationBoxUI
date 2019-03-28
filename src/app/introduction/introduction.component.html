@@ -1,10 +1,10 @@
 <!--<div *ngIf="loading" class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>-->
 
-
+<!--introduction Mode-->
 <div *ngIf="introductionMode">
   <p align="center"> Enter Story Title:
 
-    <input type="text" [(ngModel)]="story.title">
+    <input type="text" [(ngModel)]="storyTitle">
     <br>
   </p>
 
@@ -27,13 +27,15 @@
 
 </div>
 
+<!--build Mode-->
 <div *ngIf="buildMode">
   <h4> Scene number: {{scene_number}} </h4>
   <div id="OuterDiv1">
 
     <div class="leftpane">
-      <div *ngIf="data && data.imageRequest1 && data.imageRequest1.blob">
-        <img [src]="data.imageRequest1.blob" [width]="200" [height]="300">
+      <!--<div *ngIf="data && data.imageRequest1.blob && data.imageRequest1.blob">-->
+      <div *ngIf="data && data.imageRequest1">
+        <img [src]="data.imageRequest1.blob" [width]="250" [height]="250">
       </div>
       <!--<a routerLink="/story-builder" class="button">Previous Scene</a>-->
     </div>
@@ -43,9 +45,9 @@
       <textarea [(ngModel)]="data.user_entered_dialogue1" class="textArea" id="textArea1" rows="4" cols="55"
                 placeholder="Enter first dialogue"></textarea>
       <br>
-      <p>{{data.markov_dialog_2}}</p>
+      <p *ngIf="data && data.imageRequest2">{{data.markov_dialog_2}}</p>
       <br>
-      <textarea [(ngModel)]="data.user_entered_dialogue2" class="textArea" id="textArea2" rows="4" cols="55"
+      <textarea *ngIf="data.imageRequest2" [(ngModel)]="data.user_entered_dialogue2" class="textArea" id="textArea2" rows="4" cols="55"
                 placeholder="Enter second dialogue"></textarea>
 
       <br><br><br><br><br><br><br>
@@ -57,14 +59,16 @@
     </div>
     <div class="rightpane">
 
-      <div *ngIf="data && data.imageRequest2 && data.imageRequest2.blob">
-        <img style="transform: rotateY(180deg)" [src]="data.imageRequest2.blob" [width]="200" [height]="300">
+      <div *ngIf="data && data.imageRequest2">
+        <img style="transform: rotateY(180deg)" [src]="data.imageRequest2.blob" [width]="250" [height]="250">
       </div>
       <!--<a routerLink="/story-builder" class="button">Add scene</a>-->
     </div>
   </div>
 </div>
 
+
+<!--selection Mode-->
 <div *ngIf="selectionMode">
   <div align="center">
     <button class="btn btn-outline-success btn-block" (click)="viewHTMLClicked()"> View HTML </button>
@@ -78,29 +82,31 @@
 </div>
 
 &nbsp; &nbsp; &nbsp;
+
+<!--view HTML MOde-->
 <div *ngIf="viewHTMLMode">
 
   <div style="font-family: Arial" id="OuterDiv2">
     <br>
-    <h2 align="center">{{storyTitle}}</h2>
+    <h2 align="center">{{story.title}}</h2>
     <br><br>
     <!--<p> {{introduction}} </p>-->
     <table style="width: revert">
       <tbody>
-      <tr *ngFor="let dummy of ' '.repeat(number_of_scenes).split(''); let i = index">
-        <td><img [src]="imageRequests[2*i].blob" [width]="200" [height]="300"></td>
+      <tr *ngFor="let scene of story.panel; let i = index">
+        <td><img [src]="scene.characters[0].image.blob" [width]="250" [height]="250"></td>
         <td>
-          {{markovGeneratedTexts[2*i]}}
+          {{scene.characters[0].markov_generated}}
           <br>
-          {{userEnteredText[2*i]}}
+          {{scene.characters[0].user_text}}
           <br>
-          {{markovGeneratedTexts[2*i + 1]}}
+          <div *ngIf="scene.characters[1]">{{scene.characters[1].markov_generated}}</div>
           <br>
-          {{userEnteredText[2*i + 1]}}
+          <div *ngIf="scene.characters[1]">{{scene.characters[1].user_text}}</div>
           <br>
         </td>
         <td>
-          <img style="transform: rotateY(180deg)" [src]="imageRequests[2*i + 1].blob" [width]="200" [height]="300">
+          <img *ngIf="scene.characters[1]" style="transform: rotateY(180deg)" [src]="scene.characters[1].image.blob" [width]="250" [height]="250">
         </td>
         <hr>
       </tr>
@@ -111,6 +117,7 @@
 
 </div>
 
+<!--view XML mode-->
 <div *ngIf="viewXMLMode">
 
   <p>

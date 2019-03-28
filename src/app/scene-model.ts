@@ -1,5 +1,8 @@
 import {CharacterModel} from "@app/character-model";
 
 export class SceneModel {
-  public characters: Array<CharacterModel>
+  constructor(){
+    this.characters = new Array<CharacterModel>();
+  }
+  public characters: Array<CharacterModel>;
 }

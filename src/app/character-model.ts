@@ -5,4 +5,6 @@ export class CharacterModel {
   public emotional_causality: string;
   public markov_generated: string;
   public user_text: string;
+
+  public image: object;
 }

@@ -6,6 +6,8 @@ import {IPanel} from "@app/panel";
 import {INextPanel} from "@app/addNextPanel";
 import {CreateStoryRequestBody} from "@app/create-story-request-body";
 import {RequestOptions} from "@angular/http";
+import {CharacterModel} from "@app/character-model";
+import {StoryViewModel} from "@app/story-view-model";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +20,10 @@ export class ConfigServiceService {
   // private result: Observable<Blob>;
 
   constructor(private http: HttpClient) { }
+
+  getCharactersInfo(url: string): Observable<any>{
+    return this.http.get(url);
+}
 
   addStory(url: string, obj: CreateStoryRequestBody): Observable<IState> {
     let body = JSON.stringify(obj);
@@ -45,7 +51,10 @@ export class ConfigServiceService {
   }
 
   post(url: string): Observable<Object>{
-    return this.http.post(url,{});
+    let obj = {}
+    let body = JSON.stringify(obj);
+    let header = new HttpHeaders({'content-type': 'application/json'});
+    return this.http.post(url, body, {headers: header});
   }
 
   // getName(url: string): Observable<Object>{
