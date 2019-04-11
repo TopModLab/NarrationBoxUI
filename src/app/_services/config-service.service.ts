@@ -21,6 +21,10 @@ export class ConfigServiceService {
 
   constructor(private http: HttpClient) { }
 
+  getDefault(url: string): Observable<any>{
+    return this.http.get(url);
+  }
+
   getCharactersInfo(url: string): Observable<any>{
     return this.http.get(url);
 }

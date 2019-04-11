@@ -11,6 +11,7 @@ import {IPanel} from "@app/panel";
 import {StoryViewModel} from "@app/story-view-model";
 import {CharacterModel} from "@app/character-model";
 import {SceneModel} from "@app/scene-model";
+import {async} from "rxjs/internal/scheduler/async";
 
 //import {MatRadioModule} from '@angular/material/radio';
 
@@ -69,11 +70,16 @@ export class IntroductionComponent implements OnInit {
 
   // public create_story_request: CreateStoryRequestBody();
 
-  public defaults: string[] = ["assets/img/shark_default.png", "assets/img/octopus_default.png",
-    "assets/img/sealion_default.png", "assets/img/seaturtle_default.png", "assets/img/starfish_default.png","assets/img/oyester_default.png", "assets/img/fish_default.png"];
+  // public defaults: string[] = ["assets/img/shark_default.png", "assets/img/octopus_default.png",
+  //   "assets/img/sealion_default.png", "assets/img/seaturtle_default.png", "assets/img/starfish_default.png","assets/img/oyester_default.png", "assets/img/fish_default.png"];
+
+  public defaults: string[] = ["assets/img/shark_default.png", "assets/img/octopus_default.png", "assets/img/sealion_default.png"];
+  public defaultImgs: any[] = new Array();
 
   public CharacterIdToNameMap = new Map();
-
+  //public CharacterIdToTitle = new Map();
+  //public CharacterIdToGender = new Map();
+  //public CharacterIdToSociability = new Map();
 
   constructor(private xml_data: DataService, private requestService: ConfigServiceService) { }
 
@@ -87,15 +93,41 @@ export class IntroductionComponent implements OnInit {
 
     );
 
+    url = "http://narration-box.herokuapp.com/images/default";
+    this.requestService.getDefault(url).subscribe(data => {
+      this.loadDefault(data);
+    });
+
   }
+
+  loadDefault(response: any){
+    // for(let item in response){
+    //   let imageRequest = {
+    //     resolved: false,
+    //     error: false,
+    //     blob: null
+    //   };
+    //   this.createImageFromBlob(response[item].file, imageRequest);
+    //   this.defaultImgs.push(imageRequest.blob);
+
+
+  }
+
 
   populateMap(response: any){
    console.log(response);
     for(let item in response){
+      //this.CharacterIdToTitle.set(response[item].id, response[item].identity.title);
      this.CharacterIdToNameMap.set(response[item].id, response[item].identity.id);
+     //this.CharacterIdToGender.set(response[item].id, response[item].gender);
+     //this.CharacterIdToSociability.set(response[item].id, Number(1-response[item].personality[0].impactWeight).toFixed(2));
+
    }
 
-    console.log(this.CharacterIdToNameMap);
+    // console.log(this.CharacterIdToNameMap);
+    // console.log(this.CharacterIdToTitle);
+    // console.log(this.CharacterIdToGender);
+    // console.log(this.CharacterIdToSociability);
   }
 
   prevClicked(){
@@ -168,6 +200,7 @@ export class IntroductionComponent implements OnInit {
   }
 
   async getDefaultImage(character: CharacterModel){
+    console.log("Default called.")
     let imageRequest = {
       resolved: false,
       error: false,
@@ -245,9 +278,10 @@ export class IntroductionComponent implements OnInit {
   //   //
   //   // console.log("Getting image done", imageRequest, url);
   //   // return imageRequest;
-  // }
+  // }bdfb
 
-  async getImage(character: CharacterModel){
+  async getImage(character: CharacterModel) {
+    let flag = false;
     this.isImageLoading = true;
     let imageRequest = {
       resolved: false,
@@ -257,22 +291,43 @@ export class IntroductionComponent implements OnInit {
 
     let url = "https://narration-box.herokuapp.com/images/" + character.character_name + "?emotion=" + character.emotional;
     console.log(url);
+    console.log("Initial image request started")
     await this.requestService.getConfig(url).subscribe(data => {
+      console.log("INSIDE CALLBACK");
       if (data.size > 0) {
 
         this.createImageFromBlob(data, imageRequest);
         this.isImageLoading = false;
         imageRequest.resolved = true;
-      } else {
-        return this.getDefaultImage(character);
       }
+      else{
+        flag = true;
+      }
+      // } else {
+      //   return this.getDefaultImage(character);
+      // }
+
     }, error => {
       this.isImageLoading = false;
       imageRequest.resolved = true;
       imageRequest.error = true;
       console.log(error);
     });
+    console.log("Initial Image request completed");
+    if (flag) {
+      let url = "https://narration-box.herokuapp.com/images/" + character.character_name + "?emotion=default";
 
+      this.requestService.getConfig(url).subscribe(data => {
+        if (data.size > 0) {
+
+          this.createImageFromBlob(data, imageRequest);
+          this.isImageLoading = false;
+          imageRequest.resolved = true;
+        }
+      });
+
+      return imageRequest;
+    }
     return imageRequest;
   }
 
@@ -288,7 +343,9 @@ export class IntroductionComponent implements OnInit {
         character.emotional_causality = this.CharacterIdToNameMap.get(character.emotional_causality);
         character.character_id = character['character-name'];
         character.character_name = this.CharacterIdToNameMap.get(character['character-name']);
-        character.markov_generated = character.character_name + " is " + character.emotional + " because of " + character.emotional_causality + ". He said";
+        //character.markov_generated = character.character_name + " is " + character.emotional + " because of " + character.emotional_causality + ". He said";
+        character.markov_generated = character['state_text']+",";
+
         character.user_text = "";
 
 
@@ -653,7 +710,8 @@ export class IntroductionComponent implements OnInit {
           character.emotional = character["emotional"];
           character.emotional_causality = "";
           character.character_name = this.CharacterIdToNameMap.get(character["character-name"]);
-          character.markov_generated = character.character_name + " is " + character.emotional + ". He said, ";
+          // character.markov_generated = character.character_name + " is " + character.emotional + ". He said, ";
+          character.markov_generated = character['state_text']+",";
 
         // this.isImageLoading = true;
         // let imageRequest = {
