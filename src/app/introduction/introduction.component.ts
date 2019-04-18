@@ -26,8 +26,6 @@ export class IntroductionComponent implements OnInit {
   public story = new StoryViewModel();
   public story_id: string = uuid();
 
-
-
   // Mode variables
   //  loading: boolean = false;
   introductionMode: boolean = true;
@@ -35,6 +33,8 @@ export class IntroductionComponent implements OnInit {
   selectionMode: boolean = false;
   viewXMLMode: boolean = false;
   viewHTMLMode: boolean = false;
+  characterInfoMode: boolean = false;
+  characterRelationsMode: boolean = false;
 
   //XML variables.
   xml_file: string;
@@ -68,10 +68,14 @@ export class IntroductionComponent implements OnInit {
   public title: string;
   public user_story_ids: string[] = new Array();
 
+  public characterRelationMatrix: number[][] = new Array();
+
   // public create_story_request: CreateStoryRequestBody();
 
   // public defaults: string[] = ["assets/img/shark_default.png", "assets/img/octopus_default.png",
   //   "assets/img/sealion_default.png", "assets/img/seaturtle_default.png", "assets/img/starfish_default.png","assets/img/oyester_default.png", "assets/img/fish_default.png"];
+
+  public testCharacters: CharacterModel[] = new Array();
 
   public defaults: string[] = ["assets/img/shark_default.png", "assets/img/octopus_default.png", "assets/img/sealion_default.png"];
   public defaultImgs: any[] = new Array();
@@ -124,10 +128,43 @@ export class IntroductionComponent implements OnInit {
 
    }
 
+
     // console.log(this.CharacterIdToNameMap);
     // console.log(this.CharacterIdToTitle);
     // console.log(this.CharacterIdToGender);
     // console.log(this.CharacterIdToSociability);
+  }
+
+  backToCharSelection(){
+    this.introductionMode = true;
+    this.selectionMode = false;
+    this.buildMode = false;
+    this.characterInfoMode = false;
+    this.viewXMLMode = false;
+    this.viewHTMLMode = false;
+    this.characterRelationsMode = false;
+  }
+
+  backToCharInfo(){
+    this.introductionMode = false;
+    this.selectionMode = false;
+    this.buildMode = false;
+    this.characterInfoMode = true;
+    this.viewXMLMode = false;
+    this.viewHTMLMode = false;
+    this.characterRelationsMode = false;
+  }
+
+  getCharacterRelations(){
+    this.introductionMode = false;
+    this.selectionMode = false;
+    this.buildMode = false;
+    this.characterInfoMode = false;
+    this.viewXMLMode = false;
+    this.viewHTMLMode = false;
+    this.characterRelationsMode = true;
+
+    console.log(this.testCharacters);
   }
 
   prevClicked(){
@@ -229,56 +266,6 @@ export class IntroductionComponent implements OnInit {
 
     return imageRequest;
   }
-
-  // getImage(panel: IPanel){
-  //   console.log("Getting Image");
-  //   // this.isImageLoading = true;
-  //   // let imageRequest = {
-  //   //   resolved: false,
-  //   //   error: false,
-  //   //   blob: null
-  //   // };
-  //   //
-  //   // let url = "https://narration-box.herokuapp.com/images/" + panel.character_name + "?emotion=" + panel.emotional;
-  //   // console.log(url);
-  //   // this.requestService.getConfig(url).subscribe(data => {
-  //   //
-  //   //   console.log("----------------------->>>",data.size, panel.character_name, panel.emotional);
-  //   //   if(data.size > 0) {
-  //   //
-  //   //     this.createImageFromBlob(data, imageRequest);
-  //   //     this.isImageLoading = false;
-  //   //     imageRequest.resolved = true;
-  //   //   }
-  //   //   else{
-  //   //
-  //   //     return this.getDefaultImage(panel);
-  //   //
-  //   //     // imageRequest.blob = "@assets/img/"+panel.character_name+"_default.png";
-  //   //     // url = "https://narration-box.herokuapp.com/images/" + panel.character_name + "?emotion=default";
-  //   //     // await this.requestService.getConfig(url).subscribe(data => {
-  //   //     //   console.log("Loading default");
-  //   //     //   this.createImageFromBlob(data, imageRequest);
-  //   //     //   this.isImageLoading = false;
-  //   //     //   imageRequest.resolved = true;
-  //   //     // },error => {
-  //   //     //     this.isImageLoading = false;
-  //   //     //     imageRequest.resolved = true;
-  //   //     //     imageRequest.error = true;
-  //   //     //     console.log(error);
-  //   //     //   }
-  //   //     //   );
-  //   //   }
-  //   // }, error => {
-  //   //   this.isImageLoading = false;
-  //   //   imageRequest.resolved = true;
-  //   //   imageRequest.error = true;
-  //   //   console.log(error);
-  //   // });
-  //   //
-  //   // console.log("Getting image done", imageRequest, url);
-  //   // return imageRequest;
-  // }bdfb
 
   async getImage(character: CharacterModel) {
     let flag = false;
@@ -538,6 +525,7 @@ export class IntroductionComponent implements OnInit {
     this.buildMode = false;
     this.viewXMLMode = false;
     this.viewHTMLMode = false;
+    this.characterInfoMode = false;
 
     if(this.scene_number == this.number_of_scenes) {
 
@@ -572,6 +560,7 @@ export class IntroductionComponent implements OnInit {
     this.viewXMLMode = false;
     this.viewHTMLMode = true;
     this.introductionMode = false;
+    this.characterInfoMode = false;
 
     console.log(this.story);
   }
@@ -582,6 +571,7 @@ export class IntroductionComponent implements OnInit {
     this.buildMode = false;
     this.viewXMLMode = true;
     this.viewHTMLMode = false;
+    this.characterInfoMode = false;
     //
     // let url = "http://narration-box.herokuapp.com/stories/{id}?id=3";
     //
@@ -647,16 +637,34 @@ export class IntroductionComponent implements OnInit {
     this.viewHTMLMode = false;
   }
 
-  generateStory(){
+  startStory(){
+
+
 
     this.introductionMode = false;
     this.selectionMode = false;
     this.buildMode = true;
+    this.characterInfoMode = false;
     this.viewXMLMode = false;
     this.viewHTMLMode = false;
+    this.characterRelationsMode = false;
+
+    console.log(this.characterRelationMatrix);
+
+  }
+
+  generateStory(){
+
+    this.introductionMode = false;
+    this.selectionMode = false;
+    this.buildMode = false;
+    this.characterInfoMode = true;
+    this.viewXMLMode = false;
+    this.viewHTMLMode = false;
+    this.characterRelationsMode = false;
 
     //this.loading = true;
-
+    this.testCharacters = [];
     let charactersInStory: string[] = new Array();
     for(let i=0; i<this.checkBoxes.length;i++) {
       let c: string;
@@ -664,8 +672,30 @@ export class IntroductionComponent implements OnInit {
       if (this.checkBoxes[i] == true) {
         c = (i + 1).toString();
         charactersInStory.push(c);
+        let char: CharacterModel = new CharacterModel();
+        char.character_id = c;
+
+        // get default image from the server and add to char.image.
+
+        this.testCharacters.push(char);
+
       }
+
     }
+    // this.characterRelationMatrix = this.makeArray(this.testCharacters.length, this.testCharacters.length, 0.5);
+
+    console.log(this.testCharacters.length);
+    //let charMatrix: number[][] = new Array();
+    //console.log(charMatrix);
+    for(let i = 0; i < this.testCharacters.length; i++) {
+      this.characterRelationMatrix.push(new Array(this.testCharacters.length).fill(0.5));
+
+    }
+
+    console.log(this.characterRelationMatrix);
+    console.log(this.characterRelationMatrix[0][0]);
+
+
 
     console.log(this.storyTitle);
     console.log(this.story_id);

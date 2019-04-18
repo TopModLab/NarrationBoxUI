@@ -27,32 +27,6 @@
     </mat-checkbox>
   </section>
 
-  <section class="example-section">
-    <h6> Land Animals </h6>
-    <mat-checkbox class="example-margin" *ngFor="let item of defaults;let i=index" [(ngModel)]="checkBoxes[i]">
-      <div class="card">
-        <div align="center"><img src={{defaults[i]}} [width]="100" [height]="100"></div>
-      </div>
-    </mat-checkbox>
-  </section>
-
-  <section class="example-section">
-    <h6> Teachers </h6>
-    <mat-checkbox class="example-margin" *ngFor="let item of defaults;let i=index" [(ngModel)]="checkBoxes[i]">
-      <div class="card">
-        <div align="center"><img src={{defaults[i]}} [width]="100" [height]="100"></div>
-      </div>
-    </mat-checkbox>
-  </section>
-
-  <section class="example-section">
-    <h6> Long Horns </h6>
-    <mat-checkbox class="example-margin" *ngFor="let item of defaults;let i=index" [(ngModel)]="checkBoxes[i]">
-      <div class="card">
-        <div align="center"><img src={{defaults[i]}} [width]="100" [height]="100"></div>
-      </div>
-    </mat-checkbox>
-  </section>
 
   <br><br>
 
@@ -62,6 +36,63 @@
 
 </div>
 
+<!--<Character Info Mode>-->
+<div *ngIf="characterInfoMode">
+  <table style="width: revert">
+    <tbody>
+    <tr *ngFor="let item of testCharacters; let i = index">
+      <td><img [src]="(item.image || {}).blob" [width]="250" [height]="250" alt="Character Image"></td>
+        <td>
+        <div><input type="text" [(ngModel)]="item.character_name" placeholder="Name"></div>
+        <br>
+        <div><input type="text" [(ngModel)]="item.gender" placeholder="Gender"></div>
+        <br>
+        <input type="range" [(ngModel)]="item.sociability" min="0" max="100" value="50">
+
+        <!--<div><input type="text" [(ngModel)]="item.sociability" placeholder="Sociability"></div>-->
+          <br>
+        </td>
+      <hr>
+    </tr>
+    </tbody>
+  </table>
+  <div align="center">
+    <a style="padding-right: 5px" class="btn btn-primary" (click)="backToCharSelection()"> Previous </a>
+    <!--<a class="btn btn-primary"  (click)="completeStory()">Complete Story</a>-->
+    <a class="btn btn-primary"  (click)="getCharacterRelations()"> Next </a>
+  </div>
+</div>
+
+<!--<Character Relations mode>-->
+<div *ngIf="characterRelationsMode">
+  <table style="width: revert">
+    <tbody>
+    <tr *ngFor="let item of testCharacters; let i = index">
+      <td *ngFor="let j of testCharacters; let k = index">
+        <div>{{item.character_name}}</div>
+        <input type="range" [(ngModel)]="characterRelationMatrix[i][k]" min="1" max="100" value="50">
+        <div>{{testCharacters[k].character_name}}</div>
+      </td>
+      <!--<td>-->
+        <!--<div><input type="text" [(ngModel)]="item.character_name" placeholder="Name"></div>-->
+        <!--<br>-->
+        <!--<div><input type="text" [(ngModel)]="item.gender" placeholder="Gender"></div>-->
+        <!--<br>-->
+        <!--<div><input type="text" [(ngModel)]="item.sociability" placeholder="Sociability"></div>-->
+        <!--<br>-->
+      <!--</td>-->
+
+      <!--<hr>-->
+    </tr>
+    </tbody>
+  </table>
+  <div align="center">
+    <a style="padding-right: 5px" class="btn btn-primary" (click)="backToCharInfo()">Previous</a>
+    <!--<a class="btn btn-primary"  (click)="completeStory()">Complete Story</a>-->
+    <a class="btn btn-primary"  (click)="startStory()"> Generate Story </a>
+  </div>
+
+</div>
 <!--build Mode-->
 <div *ngIf="buildMode">
   <h4> Scene number: {{scene_number}} </h4>
