@@ -266,13 +266,18 @@ export class IntroductionComponent implements OnInit {
   prevClicked(){
 
     this.scene_number -= 1;
-    if(this.scene_number == 0){
-
-    }
+    // if(this.scene_number == 0){
+    //   this.introductionMode = false;
+    //   this.selectionMode = false;
+    //   this.buildMode = false;
+    //   this.characterInfoMode = false;
+    //   this.viewXMLMode = false;
+    //   this.viewHTMLMode = false;
+    //   this.characterRelationsMode = true;
+    // }
 
     if(this.scene_number == 1){
-
-      //this.prevButtonFlag = false;
+      this.prevButtonFlag = false;
     }
 
     if(this.scene_number+1 == this.number_of_scenes){
@@ -650,7 +655,7 @@ export class IntroductionComponent implements OnInit {
 
     let url = "http://narration-box.herokuapp.com/stories/{id}?id="+this.story.id;
     this.requestService.getStory(url).subscribe (data => {
-      this.extractStoryInfo(data)
+      this.extractStoryInfo(data);
     });
 
   }
@@ -748,9 +753,13 @@ export class IntroductionComponent implements OnInit {
     this.viewHTMLMode = false;
     this.characterRelationsMode = false;
 
+    //this.scene_number += 1;
+
     console.log(this.characterRelationMatrix);
 
+
     // call create character for each character.
+
 
     let ids_in_story: string[] = new Array();
 
