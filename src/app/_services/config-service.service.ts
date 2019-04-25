@@ -65,6 +65,12 @@ export class ConfigServiceService {
     return this.http.get<IPanel>(url);
   }
 
+  createStory(url: string, obj: CreateStoryRequestBody): Observable<any>{
+    let body = JSON.stringify(obj);
+    let header = new HttpHeaders({'content-type': 'application/json'});
+    return this.http.post(url, body, {headers: header});
+  }
+
   post(url: string): Observable<Object>{
     let obj = {}
     let body = JSON.stringify(obj);

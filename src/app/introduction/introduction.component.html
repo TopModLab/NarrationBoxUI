@@ -76,7 +76,7 @@
     <div *ngFor="let item of testCharacters; let i = index">
       <tr *ngFor="let j of testCharacters; let k = index">
         <td><div>{{item.character_name}}</div> </td>
-        <td>Likes: <input type="range" [(ngModel)]="characterRelationMatrix[i][k]" min="1" max="100" value="50"></td>
+        <td> DisLike <input type="range" [(ngModel)]="characterRelationMatrix[i][k]" min="1" max="100" value="50"> Like </td>
         <td><div>{{testCharacters[k].character_name}}</div></td>
       </tr>
       <!--<td>-->

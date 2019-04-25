@@ -139,8 +139,10 @@ export class IntroductionComponent implements OnInit {
       char.character_name = item;
       char.character_id = uuid();
 
-      this.category_ids.push(item.toString());
+      this.category_ids.push(char.character_id);
       this.UuidToImageNameMap.set(char.character_id, char.character_name);
+      console.log("CHAR_ID:"+char.character_id);
+      console.log("CHAR_NAME: "+this.UuidToImageNameMap.get(char.character_id));
       //this.UuidToCheckBoxMap.set(char.character_id, );
       let imageRequest = {
         resolved: false,
@@ -264,8 +266,13 @@ export class IntroductionComponent implements OnInit {
   prevClicked(){
 
     this.scene_number -= 1;
+    if(this.scene_number == 0){
+
+    }
+
     if(this.scene_number == 1){
-      this.prevButtonFlag = false;
+
+      //this.prevButtonFlag = false;
     }
 
     if(this.scene_number+1 == this.number_of_scenes){
@@ -421,9 +428,9 @@ export class IntroductionComponent implements OnInit {
         //const panel = {} as IPanel;
         //let char = new CharacterModel();
         //char = character;
-        character.emotional_causality = this.CharacterIdToNameMap.get(character.emotional_causality);
+        character.emotional_causality = this.UuidToImageNameMap.get(character.emotional_causality);
         character.character_id = character['character-name'];
-        character.character_name = this.CharacterIdToNameMap.get(character['character-name']);
+        character.character_name = this.UuidToImageNameMap.get(character['character-name']);
         //character.markov_generated = character.character_name + " is " + character.emotional + " because of " + character.emotional_causality + ". He said";
         character.markov_generated = character['state_text']+",";
 
@@ -570,7 +577,7 @@ export class IntroductionComponent implements OnInit {
       this.xml_data.changeNumberOfScenes(this.number_of_scenes);
 
       this.requestService.post("http://narration-box.herokuapp.com/stories/newPanel?storyId="+this.story.id).subscribe (data => {
-        this.createScene(data)
+        this.createScene(data);
       });
     }
     else {
@@ -745,9 +752,18 @@ export class IntroductionComponent implements OnInit {
 
     // call create character for each character.
 
+    let ids_in_story: string[] = new Array();
+
     this.testCharacters.forEach((item, index) => {
 
-      let empty_array: number[][];
+      console.log("CHAR_ID for TEST Char"+item.character_id);
+
+      ids_in_story.push(item.character_id);
+
+      let empty_array: any[] = new Array();
+      let num_array: number[] = new Array();
+      num_array.push(0);
+      empty_array.push(num_array);
       //let temp: number[] = new Array();
       //empty_array.push(temp);
       let char_rel_array: RelationModel[] = new Array();
@@ -766,36 +782,41 @@ export class IntroductionComponent implements OnInit {
 
       let state_ids:string[] = new Array();
       state_ids.push("emotional");
-      let org_id = this.UuidToImageNameMap.get(item.character_id);
-      let char_identity = new IdentityModel(org_id, "", item.character_name);
+
+      let orgId: string = this.UuidToImageNameMap.get(item.character_id.toString());
+      console.log("CHAR_ID"+item.character_id.toString());
+      console.log("ID_NAME"+orgId);
+
+      let char_identity: IdentityModel = new IdentityModel(orgId, "",item.character_name);
 
       console.log("CHARACTER NAME: "+item.character_name);
       let char_personality = new PersonalityModel(1-(item.sociability)/100, "emotional", this.characterRelationMatrix[index][index]/100, empty_array);
-      let char_request: CreateCharacterModel = new CreateCharacterModel(item.gender, item.character_id, char_identity, char_personality, 0.5, char_rel_array, state_ids);
+
+      let char_personality_array: PersonalityModel[] = new Array();
+      char_personality_array.push(char_personality);
+      let char_request: CreateCharacterModel = new CreateCharacterModel(item.gender, item.character_id, char_identity, char_personality_array, 0.5, char_rel_array, state_ids);
 
       //char_request.gender = item.gender;
       //char_request.id = item.character_id;
       //char_identity = new IdentityModel(item.character_id, "", );
-      //char_request.
+      //char_request..
       console.log(char_request);
-      this.requestService.createCharacter("http://narration-box.herokuapp.com/characters/", char_request).subscribe();
+      this.requestService.createCharacter("http://narration-box.herokuapp.com/characters/", char_request).subscribe(data => {
+        console.log(data);
+      });
     });
-    // for(let item of this.testCharacters){
-    //   // post request
-    //
-    //   let org_id = this.UuidToImageNameMap.get(item.character_id);
-    //
-    //   let char_identity = new IdentityModel(org_id, "", item.character_name);
-    //   let char_personality = new PersonalityModel(1-item.sociability, "emotional", this.characterRelationMatrix[_i][_i]);
-    //   let char_request: CreateCharacterModel = new CreateCharacterModel(item.gender, item.character_id, char_identity,  );
-    //
-    //   //char_request.gender = item.gender;
-    //   //char_request.id = item.character_id;
-    //   //char_identity = new IdentityModel(item.character_id, "", );
-    //   //char_request.
-    //
-    //   this.requestService.createCharacter("http://narration-box.herokuapp.com/characters/", char_request);
-    // }
+
+
+    // create Story
+
+    let url = "http://narration-box.herokuapp.com/stories/";
+    let story_id = uuid();
+    this.user_story_ids.push(story_id);
+    let create_story_request: CreateStoryRequestBody = new CreateStoryRequestBody(ids_in_story, story_id, this.storyTitle);
+
+    this.requestService.createStory(url, create_story_request).subscribe(data => {
+      this.createFirstScene(data);
+    });
 
   }
 
@@ -831,8 +852,10 @@ export class IntroductionComponent implements OnInit {
 
 
         // required for the get Default method.
-        char.character_name = this.category_ids[i];
-        char.character_id = uuid();
+        char.character_id = this.category_ids[i];
+        char.character_name = this.UuidToImageNameMap.get(char.character_id);
+        console.log("char.character NAME: "+ this.category_ids[i]);
+        //char.character_id =
         await this.getDefaultImage(char).then(data =>
           {
             char.image = data;
@@ -895,6 +918,7 @@ export class IntroductionComponent implements OnInit {
 
   async createFirstScene(state: IState){
     console.log(state);
+    this.number_of_scenes += 1;
     this.story.id = state.id;
     //this.story.title = state.title;
     this.story.panel = state.panels;
@@ -911,7 +935,7 @@ export class IntroductionComponent implements OnInit {
           character.character_id = character["character-name"];
           character.emotional = character["emotional"];
           character.emotional_causality = "";
-          character.character_name = this.CharacterIdToNameMap.get(character["character-name"]);
+          character.character_name = this.UuidToImageNameMap.get(character["character-name"]);
           // character.markov_generated = character.character_name + " is " + character.emotional + ". He said, ";
           character.markov_generated = character['state_text']+",";
 

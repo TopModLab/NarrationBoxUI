@@ -8,6 +8,6 @@ export class PersonalityModel{
   }
   public impactWeight: number;
   public likenessScore: number;
-  public matrix: number[];
+  public matrix: any[];
   public stateDescriptorId: string;
 }
