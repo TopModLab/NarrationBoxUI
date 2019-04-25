@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {XMLData} from "@app/XMLData";
+import {MatRadioModule} from '@angular/material/radio';
 import {DataService} from "@app/_services/xml_data.service";
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {ConfigServiceService} from "@app/_services/config-service.service";
@@ -12,8 +13,13 @@ import {StoryViewModel} from "@app/story-view-model";
 import {CharacterModel} from "@app/character-model";
 import {SceneModel} from "@app/scene-model";
 import {async} from "rxjs/internal/scheduler/async";
+import {CreateCharacterModel} from "@app/createCharacterModel";
+import {IdentityModel} from "@app/identityModel";
+import {PersonalityModel} from "@app/personalityModel";
+import {RelationModel} from "@app/relationModel";
 
 //import {MatRadioModule} from '@angular/material/radio';
+
 
 @Component({
   selector: 'app-introduction',
@@ -62,7 +68,7 @@ export class IntroductionComponent implements OnInit {
   //public introduction = "This story has characters, Tom the shark, Jerry the Octopus and Quirky the sealion. The relationship between them is defined as " +
   //  "per the markov chain.";
 
-  public checkBoxes: boolean[] = [false, false, false, false, false, false, false];
+  public checkBoxes: boolean[] = new Array();
 
   //public charactersInStory: string[] = new Array();
   public title: string;
@@ -85,48 +91,134 @@ export class IntroductionComponent implements OnInit {
   //public CharacterIdToGender = new Map();
   //public CharacterIdToSociability = new Map();
 
+  public UuidToImageNameMap = new Map();
+  public UuidToCheckBoxMap = new Map();
+  // declarations for new elements
+  public number_of_chars_in_selected_tab: number;
+  public default_images_in_selected_tab: any[] = new Array();
+  public category_ids: any[] = new Array();
+
   constructor(private xml_data: DataService, private requestService: ConfigServiceService) { }
 
 
   // use ngOnInit and populateMap to generate statements for the actors in the display screen.
   ngOnInit() {
-    let url ="http://narration-box.herokuapp.com/characters/";
+
+    // make get request based on selected tab.
+    let url ="http://narration-box.herokuapp.com/images/ids";
     this.requestService.getCharactersInfo(url).subscribe(data => {
-          this.populateMap(data);
+          this.loadDefault(data).then(data=> {
+
+            }
+          );
       }
 
     );
 
-    url = "http://narration-box.herokuapp.com/images/default";
+    // url = "http://narration-box.herokuapp.com/images/default";
+    // this.requestService.getDefault(url).subscribe(data => {
+    //   this.loadDefault(data);
+    // });
+
+  }
+
+  async loadDefault(data: any){
+    console.log("Start Load Default");
+    console.log(data);
+    this.number_of_chars_in_selected_tab = data.length;
+    console.log(data.length);
+    let char_array = new Array<CharacterModel>();
+
+    this.checkBoxes = [];
+
+    for(let item of data){
+
+      console.log(item);
+      this.checkBoxes.push(false);
+      let char = new CharacterModel();
+      char.character_name = item;
+      char.character_id = uuid();
+
+      this.category_ids.push(item.toString());
+      this.UuidToImageNameMap.set(char.character_id, char.character_name);
+      //this.UuidToCheckBoxMap.set(char.character_id, );
+      let imageRequest = {
+        resolved: false,
+        error: false,
+        blob: null
+      };
+
+      await this.getDefaultImage(char).then(data =>
+        {
+          char.image = data.blob;
+          console.log("CHARACTER IMAge ===  ",char.image);
+          this.default_images_in_selected_tab.push(data);
+          char_array.push(char);
+        }
+
+      );
+
+      //imageRequest = this.getDefaultImage(char);
+      //this.createImageFromBlob(item.file, imageRequest);
+      //this.default_images_in_selected_tab.push(imageRequest.blob);
+
+      //this.default_images_in_selected_tab.push(item.file);
+    }
+
+    // this.number_of_chars_in_selected_tab = response.length;
+    //
+    //   for(let item of response){
+    //     let imageRequest = {
+    //       resolved: false,
+    //       error: false,
+    //       blob: null
+    //     };
+    //
+    //
+    //
+    //     this.createImageFromBlob(response, imageRequest);
+    //     this.default_images_in_selected_tab.push(imageRequest.blob);
+      }
+
+
+  async populateMap(response: any){
+    console.log("Start Populate Map");
+    console.log(response);
+    this.number_of_chars_in_selected_tab = response.length;
+    console.log(response.length);
+
+    let url = "http://narration-box.herokuapp.com/images/default";
+
     this.requestService.getDefault(url).subscribe(data => {
-      this.loadDefault(data);
+        console.log(data);
+        this.loadDefault(data).then(data =>
+        {
+
+        });
+
+
     });
-
-  }
-
-  loadDefault(response: any){
-    // for(let item in response){
-    //   let imageRequest = {
-    //     resolved: false,
-    //     error: false,
-    //     blob: null
-    //   };
-    //   this.createImageFromBlob(response[item].file, imageRequest);
-    //   this.defaultImgs.push(imageRequest.blob);
-
-
-  }
-
-
-  populateMap(response: any){
-   console.log(response);
-    for(let item in response){
-      //this.CharacterIdToTitle.set(response[item].id, response[item].identity.title);
-     this.CharacterIdToNameMap.set(response[item].id, response[item].identity.id);
-     //this.CharacterIdToGender.set(response[item].id, response[item].gender);
-     //this.CharacterIdToSociability.set(response[item].id, Number(1-response[item].personality[0].impactWeight).toFixed(2));
-
-   }
+   //  for(let item of response){
+   //
+   //    let url = "http://narration-box.herokuapp.com/images/"+item.toString()+"?emotion=default";
+   //
+   //    console.log(item);
+   //
+   //    this.requestService.getDefault(url).subscribe(data => {
+   //      let imageRequest = {
+   //        resolved: false,
+   //        error: false,
+   //        blob: null
+   //      };
+   //      this.createImageFromBlob(data, imageRequest);
+   //      this.default_images_in_selected_tab.push(imageRequest.blob);
+   //       });
+   //    //this.CharacterIdToTitle.set(response[item].id, response[item].identity.title);
+   //   //this.CharacterIdToNameMap.set(response[item].id, response[item].identity.id);
+   //   //this.CharacterIdToGender.set(response[item].id, response[item].gender);
+   //   //this.CharacterIdToSociability.set(response[item].id, Number(1-response[item].personality[0].impactWeight).toFixed(2));
+   //
+   // }
 
 
     // console.log(this.CharacterIdToNameMap);
@@ -165,6 +257,8 @@ export class IntroductionComponent implements OnInit {
     this.characterRelationsMode = true;
 
     console.log(this.testCharacters);
+    console.log("GENDER char 1", this.testCharacters[0].gender);
+    console.log("GENDER char 2", this.testCharacters[1].gender);
   }
 
   prevClicked(){
@@ -639,8 +733,6 @@ export class IntroductionComponent implements OnInit {
 
   startStory(){
 
-
-
     this.introductionMode = false;
     this.selectionMode = false;
     this.buildMode = true;
@@ -651,9 +743,63 @@ export class IntroductionComponent implements OnInit {
 
     console.log(this.characterRelationMatrix);
 
+    // call create character for each character.
+
+    this.testCharacters.forEach((item, index) => {
+
+      let empty_array: number[][];
+      //let temp: number[] = new Array();
+      //empty_array.push(temp);
+      let char_rel_array: RelationModel[] = new Array();
+
+      for (let i = 0, len = this.testCharacters.length; i < len; i++) {
+        if(this.testCharacters[i].character_id != item.character_id){
+
+          let char_personality_array: PersonalityModel[] = new Array();
+          //console.log(item.soci)
+          let temp_pers: PersonalityModel = new PersonalityModel((1-(1-(item.sociability/100)))/(len-1), "emotional", this.characterRelationMatrix[index][i]/100, empty_array);
+          char_personality_array.push(temp_pers);
+          let temp_rel: RelationModel= new RelationModel(this.testCharacters[i].character_id, char_personality_array);
+          char_rel_array.push(temp_rel);
+        }
+      }
+
+      let state_ids:string[] = new Array();
+      state_ids.push("emotional");
+      let org_id = this.UuidToImageNameMap.get(item.character_id);
+      let char_identity = new IdentityModel(org_id, "", item.character_name);
+
+      console.log("CHARACTER NAME: "+item.character_name);
+      let char_personality = new PersonalityModel(1-(item.sociability)/100, "emotional", this.characterRelationMatrix[index][index]/100, empty_array);
+      let char_request: CreateCharacterModel = new CreateCharacterModel(item.gender, item.character_id, char_identity, char_personality, 0.5, char_rel_array, state_ids);
+
+      //char_request.gender = item.gender;
+      //char_request.id = item.character_id;
+      //char_identity = new IdentityModel(item.character_id, "", );
+      //char_request.
+      console.log(char_request);
+      this.requestService.createCharacter("http://narration-box.herokuapp.com/characters/", char_request).subscribe();
+    });
+    // for(let item of this.testCharacters){
+    //   // post request
+    //
+    //   let org_id = this.UuidToImageNameMap.get(item.character_id);
+    //
+    //   let char_identity = new IdentityModel(org_id, "", item.character_name);
+    //   let char_personality = new PersonalityModel(1-item.sociability, "emotional", this.characterRelationMatrix[_i][_i]);
+    //   let char_request: CreateCharacterModel = new CreateCharacterModel(item.gender, item.character_id, char_identity,  );
+    //
+    //   //char_request.gender = item.gender;
+    //   //char_request.id = item.character_id;
+    //   //char_identity = new IdentityModel(item.character_id, "", );
+    //   //char_request.
+    //
+    //   this.requestService.createCharacter("http://narration-box.herokuapp.com/characters/", char_request);
+    // }
+
   }
 
-  generateStory(){
+  async generateStory(){
 
     this.introductionMode = false;
     this.selectionMode = false;
@@ -665,19 +811,39 @@ export class IntroductionComponent implements OnInit {
 
     //this.loading = true;
     this.testCharacters = [];
+
+    // for each selected character make a body for post request to create a character.
+
+
+
     let charactersInStory: string[] = new Array();
     for(let i=0; i<this.checkBoxes.length;i++) {
-      let c: string;
+      //let c: string;
 
       if (this.checkBoxes[i] == true) {
-        c = (i + 1).toString();
-        charactersInStory.push(c);
+        //c = (i + 1).toString();
+        //charactersInStory.push(c);
         let char: CharacterModel = new CharacterModel();
-        char.character_id = c;
+
 
         // get default image from the server and add to char.image.
+        //get default for the id
 
-        this.testCharacters.push(char);
+
+        // required for the get Default method.
+        char.character_name = this.category_ids[i];
+        char.character_id = uuid();
+        await this.getDefaultImage(char).then(data =>
+          {
+            char.image = data;
+            this.testCharacters.push(char);
+            charactersInStory.push(char.character_id);
+            //console.log("CHARACTER IMAge ===  ",char.image);
+            //this.default_images_in_selected_tab.push(data);
+            //char_array.push(char);
+          }
+
+        );
 
       }
 
@@ -688,6 +854,12 @@ export class IntroductionComponent implements OnInit {
     //let charMatrix: number[][] = new Array();
     //console.log(charMatrix);
     for(let i = 0; i < this.testCharacters.length; i++) {
+
+      //let test_identity:IdentityModel = new IdentityModel(id, "", title);
+
+      //let obj:CreateCharacterModel = new CreateCharacterModel("male", this.testCharacters[i].character_id, );
+      let url = "";
+      //this.requestService.createCharacter(url, obj);
       this.characterRelationMatrix.push(new Array(this.testCharacters.length).fill(0.5));
 
     }
@@ -712,11 +884,11 @@ export class IntroductionComponent implements OnInit {
       // create_story_request.charactersInStory = this.charactersInStory;
 
     console.log(create_story_request);
-      this.requestService.addStory("http://narration-box.herokuapp.com/stories/", create_story_request).subscribe (data => {
-        this.createFirstScene(data);
-      });
+      // this.requestService.addStory("http://narration-box.herokuapp.com/stories/", create_story_request).subscribe (data => {
+      //   this.createFirstScene(data);
+      // });
 
-    this.number_of_scenes += 1;
+    // this.number_of_scenes += 1;
 
   }
 

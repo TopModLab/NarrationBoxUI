@@ -2,7 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule }    from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
+import {MatRadioModule} from "@angular/material";
 // used to create fake backend
 import { fakeBackendProvider } from './_helpers';
 
@@ -42,7 +42,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         FileUploadModule,
         routing,
         FormsModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatRadioModule
     ],
     declarations: [
         AppComponent,

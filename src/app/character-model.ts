@@ -7,6 +7,6 @@ export class CharacterModel {
   public user_text: string;
   public gender: string;
   public sociability: number;
-
+  public prob_of_occurence: number;
   public image: object;
 }

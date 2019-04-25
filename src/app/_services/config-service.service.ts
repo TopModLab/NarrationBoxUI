@@ -8,6 +8,7 @@ import {CreateStoryRequestBody} from "@app/create-story-request-body";
 import {RequestOptions} from "@angular/http";
 import {CharacterModel} from "@app/character-model";
 import {StoryViewModel} from "@app/story-view-model";
+import {CreateCharacterModel} from "@app/createCharacterModel";
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,16 @@ export class ConfigServiceService {
   // private result: Observable<Blob>;
 
   constructor(private http: HttpClient) { }
+
+  createCharacter(url: string, obj: CreateCharacterModel): Observable<any>{
+    let body = JSON.stringify(obj);
+    let header = new HttpHeaders({'content-type': 'application/json'});
+    // return this.http.post<CreateCharacterModel>(url, body, {headers: header})
+    //   .pipe(
+    //     catchError(this.handleError('addHero', hero))
+    //   );
+    return this.http.post(url, body, {headers: header});
+  }
 
   getDefault(url: string): Observable<any>{
     return this.http.get(url);
