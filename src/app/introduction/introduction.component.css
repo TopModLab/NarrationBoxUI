@@ -1,3 +1,9 @@
+/*table.center {*/
+  /*margin-left:auto;*/
+  /*margin-right:auto;*/
+  /*width: 100%;*/
+/*}*/
+
 .example-radio-group {
   /*display: flex;*/
   /*flex-direction: column;*/
@@ -82,11 +88,14 @@ table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
+  margin-left:auto;
+  margin-right:auto;
+
 }
 
 td, th {
   border: 1px solid #dddddd;
-  text-align: left;
+  text-align: center;
   padding: 8px;
 }
 
